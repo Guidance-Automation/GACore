@@ -32,11 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GAAPICommon.Architecture, Version=1.38.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GAAPICommon.1.38.1\lib\netstandard2.0\GAAPICommon.Architecture.dll</HintPath>
+    <Reference Include="GAAPICommon.Architecture, Version=1.39.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GAAPICommon.1.39.1\lib\netstandard2.0\GAAPICommon.Architecture.dll</HintPath>
     </Reference>
-    <Reference Include="GAAPICommon.Core, Version=1.38.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\GAAPICommon.1.38.1\lib\netstandard2.0\GAAPICommon.Core.dll</HintPath>
+    <Reference Include="GAAPICommon.Core, Version=1.39.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GAAPICommon.1.39.1\lib\netstandard2.0\GAAPICommon.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
