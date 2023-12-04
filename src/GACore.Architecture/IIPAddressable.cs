@@ -4,5 +4,5 @@ namespace GACore.Architecture;
 
 public interface IIPAddressable
 {
-	public IPAddress IPAddress { get; set; }
+	public IPAddress? IPAddress { get; set; }
 }

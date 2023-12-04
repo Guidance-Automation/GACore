@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore.Extensions;
+﻿namespace GACore.Extensions;
 
 public static class Generic_ExtensionMethods
 {

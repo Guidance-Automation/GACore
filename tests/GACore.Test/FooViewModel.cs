@@ -6,7 +6,7 @@ public class FooViewModel : AbstractViewModel<FooModel>
 	{
 	}
 
-	protected override void HandleModelUpdate(FooModel oldValue, FooModel newValue)
+	protected override void HandleModelUpdate(FooModel? oldValue, FooModel? newValue)
 	{
 		base.HandleModelUpdate(oldValue, newValue);
 	}

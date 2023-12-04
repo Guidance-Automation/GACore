@@ -1,6 +1,5 @@
 ﻿using GACore.Extensions.Test.TestObjects;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Runtime.Versioning;
 
 namespace GACore.Extensions.Test;

@@ -4,5 +4,5 @@ namespace GACore.Architecture;
 
 public interface IViewModel<T> : INotifyPropertyChanged where T : class
 {
-    public T Model { get; }
+    public T? Model { get; }
 }

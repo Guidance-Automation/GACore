@@ -1,5 +1,4 @@
 ﻿using GACore.Architecture;
-using System;
 
 namespace GACore.Controls.ViewModel;
 

@@ -5,10 +5,11 @@
 		<OutputType>Library</OutputType>
 		<AssemblyTitle>GACore.Architecture</AssemblyTitle>
 		<Product>GACore.Architecture</Product>
-		<Copyright>Copyright ©  2019</Copyright>
+		<Copyright>Copyright ©  2023</Copyright>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.21.0.0</FileVersion>
-		<ProjectGuid>{f92aaf2b-ecff-43e7-a3e7-aba254e46db8}</ProjectGuid>
+		<ImplicitUsings>true</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	
 	<ItemGroup>

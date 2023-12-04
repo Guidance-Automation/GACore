@@ -11,7 +11,8 @@
 		<Copyright>Copyright ©  2019</Copyright>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
 		<FileVersion>1.21.0.0</FileVersion>
-		<ProjectGuid>{9641b9d0-8dd9-448f-9625-68fba376f10b}</ProjectGuid>
+		<ImplicitUsings>true</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

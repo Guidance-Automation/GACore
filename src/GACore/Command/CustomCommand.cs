@@ -1,26 +1,25 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace GACore.Command;
 
-public class CustomCommand(Action<object> execute, Predicate<object> canExecute) : ICommand
+public class CustomCommand(Action<object?> execute, Predicate<object?> canExecute) : ICommand
 {
-	private readonly Action<object> _execute = execute;
+	private readonly Action<object?> _execute = execute;
 
-	private readonly Predicate<object> _canExecute = canExecute;
+	private readonly Predicate<object?> _canExecute = canExecute;
 
-    public event EventHandler CanExecuteChanged
+    public event EventHandler? CanExecuteChanged
 	{
 		add { CommandManager.RequerySuggested += value; }
 		remove { CommandManager.RequerySuggested -= value; }
 	}
 
-	public bool CanExecute(object parameter)
+	public bool CanExecute(object? parameter)
 	{
 		return _canExecute == null || _canExecute(parameter);
 	}
 
-	public void Execute(object parameter)
+	public void Execute(object? parameter)
 	{
 		_execute(parameter);
 	}

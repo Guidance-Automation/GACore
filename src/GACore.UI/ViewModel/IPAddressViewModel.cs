@@ -74,11 +74,11 @@ public class IPAddressViewModel : AbstractViewModel<IIPAddressable>
 
     public void ApplyChanges()
     {
-        Logger.Trace("[IPAddressViewModel] ApplyChanges()");
+        Logger?.Trace("[IPAddressViewModel] ApplyChanges()");
         if (Model != null) Model.IPAddress = IPAddress;
     }
 
-    public IPAddress IPAddress
+    public IPAddress? IPAddress
     {
         get { return new IPAddress(_ipAddressBytes); }
         set
@@ -99,9 +99,9 @@ public class IPAddressViewModel : AbstractViewModel<IIPAddressable>
     {
     }
 
-    protected override void HandleModelUpdate(IIPAddressable oldValue, IIPAddressable newValue)
+    protected override void HandleModelUpdate(IIPAddressable? oldValue, IIPAddressable? newValue)
     {
-        IPAddress = newValue.IPAddress ?? null;
+        IPAddress = newValue?.IPAddress ?? null;
         base.HandleModelUpdate(oldValue, newValue);
     }
 }

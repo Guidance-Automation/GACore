@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore.Architecture;
+﻿namespace GACore.Architecture;
 
 /// <summary>
 /// Lightweight structure to return a failure reason when an operation fails for traceability.
@@ -11,7 +9,7 @@ public interface IResult
 
     public bool IsSuccessful { get; }
 
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 }
 
 /// <summary>
@@ -20,5 +18,5 @@ public interface IResult
 /// <typeparam name="T">Default(T) if unsuccessful, cannot be null if successful.</typeparam>
 public interface IResult<T> : IResult
 {
-    public T Value { get; }
+    public T? Value { get; }
 }

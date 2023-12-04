@@ -1,6 +1,5 @@
 ﻿using GACore.Architecture;
 using NUnit.Framework;
-using System;
 
 namespace GACore.Test;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore.Extensions.Test.TestObjects;
+﻿namespace GACore.Extensions.Test.TestObjects;
 
 public abstract class AbstractFoo
 {
@@ -18,7 +16,7 @@ public abstract class AbstractFoo
 
     public abstract string ClassType { get; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null) return false;
 

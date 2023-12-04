@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 
 namespace GACore.Utility;
 
@@ -14,7 +11,7 @@ public class Messenger
 
 	private static readonly ConcurrentDictionary<MessengerKey, object> _dictionary = new();
 
-	private static Messenger _instance;
+	private static Messenger? _instance;
 
 	/// <summary>
 	/// Gets the single instance of the Messenger.
@@ -62,7 +59,7 @@ public class Messenger
 	/// <param name="recipient"></param>
 	/// <param name="action"></param>
 	/// <param name="context"></param>
-	public void Register<T>(object recipient, Action<T> action, object context)
+	public void Register<T>(object recipient, Action<T> action, object? context)
 	{
         MessengerKey key = new(recipient, context);
 		_dictionary.TryAdd(key, action);
@@ -84,7 +81,7 @@ public class Messenger
 	/// </summary>
 	/// <param name="recipient"></param>
 	/// <param name="context"></param>
-	public void Unregister(object recipient, object context)
+	public void Unregister(object recipient, object? context)
     {
         MessengerKey key = new(recipient, context);
 		_dictionary.TryRemove(key, out _);
@@ -108,7 +105,7 @@ public class Messenger
 	/// <typeparam name="T"></typeparam>
 	/// <param name="message"></param>
 	/// <param name="context"></param>
-	public void Send<T>(T message, object context)
+	public void Send<T>(T message, object? context)
 	{
 		IEnumerable<KeyValuePair<MessengerKey, object>> result;
 
@@ -135,11 +132,11 @@ public class Messenger
     /// </summary>
     /// <param name="recipient"></param>
     /// <param name="context"></param>
-    protected class MessengerKey(object recipient, object context)
+    protected class MessengerKey(object recipient, object? context)
     {
         public object Recipient { get; private set; } = recipient;
 
-        public object Context { get; private set; } = context;
+        public object? Context { get; private set; } = context;
 
         /// <summary>
         /// Determines whether the specified MessengerKey is equal to the current MessengerKey.
@@ -156,7 +153,7 @@ public class Messenger
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (obj is null) return false;
 			if (ReferenceEquals(this, obj)) return true;

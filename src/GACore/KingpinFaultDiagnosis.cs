@@ -1,5 +1,4 @@
 ﻿using GAAPICommon.Architecture;
-using System;
 using System.Text;
 
 namespace GACore;
@@ -31,7 +30,7 @@ public class KingpinFaultDiagnosis
         return HashCode.Combine(DynamicLimiterFault, ExtendedDataFault, NavigationFault, PCSFault);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is not KingpinFaultDiagnosis other) return false;
 

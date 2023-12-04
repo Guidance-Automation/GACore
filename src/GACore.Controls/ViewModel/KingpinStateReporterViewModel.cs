@@ -6,7 +6,7 @@ namespace GACore.Controls.ViewModel;
 
 public class KingpinStateReporterViewModel : AbstractViewModel<IKingpinStateReporter>, IRefresh
 {
-    protected override void HandleModelUpdate(IKingpinStateReporter oldValue, IKingpinStateReporter newValue)
+    protected override void HandleModelUpdate(IKingpinStateReporter? oldValue, IKingpinStateReporter? newValue)
     {
         base.HandleModelUpdate(oldValue, newValue);
         Refresh();
@@ -27,9 +27,9 @@ public class KingpinStateReporterViewModel : AbstractViewModel<IKingpinStateRepo
         }
     }
 
-    private IPAddress _ipAddress = null;
+    private IPAddress? _ipAddress = null;
 
-    public IPAddress IPAddress
+    public IPAddress? IPAddress
     {
         get { return _ipAddress; }
         private set
@@ -121,7 +121,7 @@ public class KingpinStateReporterViewModel : AbstractViewModel<IKingpinStateRepo
 
     public void Refresh()
     {
-        IKingpinState toProcess = Model?.KingpinState;
+        IKingpinState? toProcess = Model?.KingpinState;
 
         if (toProcess != null)
         {

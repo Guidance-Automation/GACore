@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 
 namespace GACore;
 
-public struct IPAddressRange
+public readonly struct IPAddressRange
 {
 	private readonly AddressFamily _addressFamily;
 
@@ -33,7 +31,7 @@ public struct IPAddressRange
         return rangeA.Equals(rangeB);
     }
 
-    public override readonly bool Equals(object obj)
+    public override readonly bool Equals(object? obj)
 	{
 		if (obj is not IPAddressRange) return false;
 

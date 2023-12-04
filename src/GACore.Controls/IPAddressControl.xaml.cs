@@ -25,7 +25,7 @@ public partial class IPAddressControl : UserControl, INotifyPropertyChanged
         new FrameworkPropertyMetadata(IPAddress.None, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnValueChanged)
         );
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public static readonly DependencyProperty MaximumIPAddressProperty = DependencyProperty.Register
         ("MaximumIPAddress",
@@ -85,47 +85,49 @@ public partial class IPAddressControl : UserControl, INotifyPropertyChanged
 
     private static void OnLimitsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-        IPAddressControl control = obj as IPAddressControl;
+        IPAddressControl? control = obj as IPAddressControl;
 
-        if (control.MinimumIPAddress == IPAddress.None)
+        if (control?.MinimumIPAddress == IPAddress.None)
             control.MinimumIPAddress = IPAddress.Parse("0.0.0.0");
 
 
-        if (control.MaximumIPAddress == IPAddress.None)
+        if (control?.MaximumIPAddress == IPAddress.None)
             control.MaximumIPAddress = IPAddress.Parse("255.255.255.255");
 
-        byte[] minimumBytes = control.MinimumIPAddress.GetAddressBytes();
-        byte[] maximumBytes = control.MaximumIPAddress.GetAddressBytes();
+        byte[]? minimumBytes = control?.MinimumIPAddress.GetAddressBytes();
+        byte[]? maximumBytes = control?.MaximumIPAddress.GetAddressBytes();
 
-        for (int i = 0; i <= 3; i++)
+        if(minimumBytes != null && maximumBytes != null)
         {
-            if (minimumBytes[i] > maximumBytes[i])
+            for (int i = 0; i <= 3; i++)
             {
-                minimumBytes[i] = maximumBytes[i];
+                if (minimumBytes[i] > maximumBytes[i])
+                {
+                    minimumBytes[i] = maximumBytes[i];
 
-                IPAddress updatedMinimum = IPAddress.Parse(string.Format("{0}.{1}.{2}.{3}",
-                    minimumBytes[0], minimumBytes[1], minimumBytes[2], minimumBytes[3]));
-
-                control.MinimumIPAddress = updatedMinimum;
-                return;
+                    IPAddress updatedMinimum = IPAddress.Parse(string.Format("{0}.{1}.{2}.{3}",
+                        minimumBytes[0], minimumBytes[1], minimumBytes[2], minimumBytes[3]));
+                    if (control != null)
+                        control.MinimumIPAddress = updatedMinimum;
+                    return;
+                }
             }
         }
-
-        control.UpdateToolTips();
+        control?.UpdateToolTips();
     }
 
     private static void OnValueChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-        IPAddressControl control = obj as IPAddressControl;
-
         IPAddress newValue = (IPAddress)e.NewValue;
-
         byte[] bytes = newValue.GetAddressBytes();
 
-        control.ByteA = bytes[0];
-        control.ByteB = bytes[1];
-        control.ByteC = bytes[2];
-        control.ByteD = bytes[3];
+        if(obj is IPAddressControl control)
+        {
+            control.ByteA = bytes[0];
+            control.ByteB = bytes[1];
+            control.ByteC = bytes[2];
+            control.ByteD = bytes[3];
+        }
     }
 
     private void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")

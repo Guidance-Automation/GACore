@@ -18,7 +18,7 @@ public partial class KingpinStateView : UserControl
 #endif
     }
 #if DEBUG
-    private void CompositionTarget_Rendering(object sender, System.EventArgs e)
+    private void CompositionTarget_Rendering(object? sender, EventArgs e)
     {
 #warning assumed parent will do this
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace GACore;
+﻿namespace GACore;
 
 /// <summary>
 /// Generic mailbox structure for storing updates for a unique object.
@@ -10,7 +7,12 @@ namespace GACore;
 /// <typeparam name="U">Mail (class)</typeparam>
 public abstract class GenericMailbox<T, U> where U : class
 {
-	public GenericMailbox(T key, U mail)
+    public event Action? Updated;
+    public U? Mail { get; private set; }
+    public T? Key { get; }
+    public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+
+    public GenericMailbox(T key, U? mail)
 	{
 		if (key == null) throw new ArgumentNullException(nameof(key));
 
@@ -19,15 +21,18 @@ public abstract class GenericMailbox<T, U> where U : class
 		LastUpdate = DateTime.Now;
 	}
 
-	public U Mail { get; private set; } = null;
+    public override int GetHashCode()
+    {
+		if(Key != null)
+		{
+            return Key.GetHashCode();
+        }
+		return -1;
+    }
 
-	public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
-
-	public override int GetHashCode() => Key.GetHashCode();
-
-	public override bool Equals(object obj)
+    public override bool Equals(object? obj)
 	{
-		if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+		if ((obj == null) || !GetType().Equals(obj.GetType()) || Key == null)
 		{
 			return false;
 		}
@@ -48,9 +53,14 @@ public abstract class GenericMailbox<T, U> where U : class
         return ToMailBoxString();
     }
 
-    public event Action Updated;
+    public void Update(U newMail)
+    {
+        Mail = newMail ?? throw new ArgumentNullException(nameof(newMail));
+        LastUpdate = DateTime.Now;
+        OnUpdated();
+    }
 
-	private void OnUpdated()
+    private void OnUpdated()
 	{
 		if(Updated != null)
         {
@@ -60,13 +70,4 @@ public abstract class GenericMailbox<T, U> where U : class
 			}
 		}
 	}
-
-	public void Update(U newMail)
-	{
-		Mail = newMail ?? throw new ArgumentNullException(nameof(newMail));
-		LastUpdate = DateTime.Now;
-		OnUpdated();
-	}
-
-	public T Key { get; }
 }

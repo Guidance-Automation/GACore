@@ -7,7 +7,7 @@ namespace GACore.DemoApp;
 [SupportedOSPlatform("windows")]
 public class FooIPAddressable : IIPAddressable
 {
-	public IPAddress IPAddress { get; set; } = IPAddress.Loopback;
+	public IPAddress? IPAddress { get; set; } = IPAddress.Loopback;
 
 	public void Randomize()
 	{

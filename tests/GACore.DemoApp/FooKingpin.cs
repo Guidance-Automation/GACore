@@ -6,9 +6,9 @@ namespace GACore.DemoApp;
 
 public class FooKingpin : IKingpinStateReporter
 {
-	private IKingpinState _kingpinState = null;
+	private IKingpinState? _kingpinState = null;
 
-	public IKingpinState KingpinState
+	public IKingpinState? KingpinState
 	{
 		get { return _kingpinState; }
 		set 

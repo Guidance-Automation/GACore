@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GACore.Extensions;
+﻿namespace GACore.Extensions;
 
 public static class TimeSpan_ExtensionMethods
 {

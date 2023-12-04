@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore.Test;
+﻿namespace GACore.Test;
 
 public class FooModel
 {

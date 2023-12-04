@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace GACore;
 
 /// <summary>
 /// Lightweight structure to tightly couple a foreground and background brush, and associated text.
 /// </summary>
-public struct BrushCollection
+public readonly struct BrushCollection
 {
 	public BrushCollection(string text, Brush foreground, Brush background)
 	{

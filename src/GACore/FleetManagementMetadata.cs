@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore;
+﻿namespace GACore;
 
 public class FleetManagementMetadata
 {
@@ -8,7 +6,7 @@ public class FleetManagementMetadata
 
     public SemVer Version { get; }
 
-    public FleetManagementMetadata(string productName, SemVer version)
+    public FleetManagementMetadata(string? productName, SemVer? version)
     {
         if (string.IsNullOrEmpty(productName))
             throw new ArgumentOutOfRangeException(nameof(productName));

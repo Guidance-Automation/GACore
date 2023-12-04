@@ -2,7 +2,7 @@
 
 public static class ExtensionMethods
 {
-	public static object GetProperty(this BrushCollection brushCollection, BrushCollectionProperty brushCollectionProperty)
+	public static object? GetProperty(this BrushCollection brushCollection, BrushCollectionProperty brushCollectionProperty)
 	{
 		switch (brushCollectionProperty)
 		{

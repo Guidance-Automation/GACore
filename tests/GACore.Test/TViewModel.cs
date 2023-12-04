@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Threading;
 using NLog;
 
 namespace GACore.Test;
@@ -38,7 +36,7 @@ public class TViewModel
         Assert.That(fooViewModel.Model, Is.Null);
     }
 
-    private void FooViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void FooViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         Assert.That(e.PropertyName, Is.EqualTo("Model"));
         _propertyChangedSet.Set();

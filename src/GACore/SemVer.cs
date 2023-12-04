@@ -1,6 +1,5 @@
 ﻿using GAAPICommon.Architecture;
 using GACore.Architecture;
-using System;
 
 namespace GACore;
 
@@ -37,7 +36,7 @@ public class SemVer : ISemVer
         return this.ToSemVerVersionString();
     }
 
-    public int CompareTo(object obj)
+    public int CompareTo(object? obj)
 	{
 		if (obj == null) return 1;
 

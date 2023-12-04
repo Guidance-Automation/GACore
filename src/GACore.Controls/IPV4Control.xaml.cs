@@ -25,9 +25,9 @@ public partial class IPV4Control : UserControl
         InitializeComponent();
     }
 
-    public IPAddress ToIPAddress()
+    public IPAddress? ToIPAddress()
     {
-        IPAddress.TryParse(IPV4String, out IPAddress ipAddress);
+        IPAddress.TryParse(IPV4String, out IPAddress? ipAddress);
         return ipAddress;
     }
 

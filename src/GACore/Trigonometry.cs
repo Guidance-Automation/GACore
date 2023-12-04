@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore;
+﻿namespace GACore;
 
 public static class Trigonometry
 {

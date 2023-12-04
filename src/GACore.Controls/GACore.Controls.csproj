@@ -5,6 +5,8 @@
 		<OutputType>Library</OutputType>
 		<PlatformName>windows</PlatformName>
 		<UseWPF>true</UseWPF>
+		<ImplicitUsings>true</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using GAAPICommon.Architecture;
 using GACore.Extensions;
-using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -15,8 +14,10 @@ public class RadToDegStringConverter : IValueConverter
 		return rad.RadToDeg();
 	}
 
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		=> throw new NotImplementedException("RadToDegStringConverter ConvertBack()");
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("RadToDegStringConverter ConvertBack()");
+    }
 }
 
 public class IsVirtualColorConverter : IValueConverter
@@ -35,7 +36,7 @@ public class IsVirtualColorConverter : IValueConverter
 
 public class DynamicLimiterStatusToOverlayTextConverter : IValueConverter
 {
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		DynamicLimiterStatus status = (DynamicLimiterStatus)value;
 		BrushCollection brushCollection = BrushDictionaries.DynamicLimiterStatusBrushCollectionDictionary.GetBrushCollection(status);
@@ -52,7 +53,7 @@ public class DynamicLimiterStatusToOverlayTextConverter : IValueConverter
 
 public sealed class NavigationStatusToOverlayTextConverter : IValueConverter
 {
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		NavigationStatus status = (NavigationStatus)value;
 		BrushCollection brushCollection = BrushDictionaries.NavigationStatusBackgroundBrushCollectionDictionary.GetBrushCollection(status);
@@ -69,7 +70,7 @@ public sealed class NavigationStatusToOverlayTextConverter : IValueConverter
 
 public class PositionControlStatusToOverlayTextConverter : IValueConverter
 {
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		PositionControlStatus status = (PositionControlStatus)value;
 		BrushCollection brushCollection = BrushDictionaries.PositionControlStatusBackgroundBrushCollectionDictionary.GetBrushCollection(status);

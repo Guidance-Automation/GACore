@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GACore.Extensions;
+﻿namespace GACore.Extensions;
 
 public static class IEnumerable_ExtensionMethods
 {
@@ -11,7 +7,7 @@ public static class IEnumerable_ExtensionMethods
     /// <summary>
     /// Randomizes the contents of an IEnumerable
     /// </summary>
-    public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable)
+    public static IEnumerable<T>? Randomize<T>(this IEnumerable<T> enumerable)
 	{
 		if (enumerable == null) return null;
 

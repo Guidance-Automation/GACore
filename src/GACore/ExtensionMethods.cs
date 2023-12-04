@@ -1,8 +1,6 @@
 ﻿using GACore.Architecture;
-using System.Collections.Generic;
 using System.Windows.Media;
 using GAAPICommon.Core.Dtos;
-using System;
 using GAAPICommon.Architecture;
 
 namespace GACore;
@@ -62,7 +60,7 @@ public static class ExtensionMethods
 
     public static KingpinFaultDiagnosis Diagnose(this IKingpinState kingpinState) => new(kingpinState);
 
-    public static BrushCollection GetBrushCollection<T>(this Dictionary<T, BrushCollection> dictionary, T key)
+    public static BrushCollection GetBrushCollection<T>(this Dictionary<T, BrushCollection> dictionary, T key) where T : notnull
     {
         if (dictionary.TryGetValue(key, out BrushCollection value))
             return value;

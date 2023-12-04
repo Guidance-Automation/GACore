@@ -11,27 +11,27 @@ namespace GACore;
 /// </summary>
 public abstract class AbstractViewModel<T> : IViewModel<T> where T : class
 {
-	private T _model = null;
+	private T? _model;
 
-	public T Model
+	public T? Model
 	{
 		get { return _model; }
 		set
 		{
-			T oldValue = _model;
+			T? oldValue = _model;
 			_model = value;
 			HandleModelUpdate(oldValue, _model);
 			OnNotifyPropertyChanged();
 
-			Logger.Debug("[{0}] Model updated: {1}", GetType().Name, value != null ? value.GetType().Name : "null" );
+			Logger?.Debug("[{0}] Model updated: {1}", GetType().Name, value != null ? value.GetType().Name : "null" );
 		}
 	}
 		
-	public Logger Logger { get; } = LoggerFactory.GetStandardLogger(StandardLogger.ViewModel);
+	public Logger? Logger { get; } = LoggerFactory.GetStandardLogger(StandardLogger.ViewModel);
 
-	protected virtual void HandleModelUpdate(T oldValue, T newValue)
+	protected virtual void HandleModelUpdate(T? oldValue, T? newValue)
 	{
-		Logger.Trace("[{0}] HandleModelUpdate() oldValue: {1}, newValue: {2}",
+		Logger?.Trace("[{0}] HandleModelUpdate() oldValue: {1}, newValue: {2}",
 			GetType().Name, 
 			oldValue == null? "null" : oldValue.ToString(),
 			newValue == null ? "null" : newValue.ToString());
@@ -43,11 +43,11 @@ public abstract class AbstractViewModel<T> : IViewModel<T> where T : class
 	{
 	}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	protected void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Logger.Trace("[{0}] OnNotifyPropertyChanged() propertyName:{1}", GetType().Name, propertyName);
+		Logger?.Trace("[{0}] OnNotifyPropertyChanged() propertyName:{1}", GetType().Name, propertyName);
 
 		// This should be an invoke becuase we want to tell the view to update, usually on a CompositionTarger.RenderFrame
 		// Doing this as BeginInvoke adds far too many messages to the message queue.

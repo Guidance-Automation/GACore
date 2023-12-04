@@ -1,5 +1,4 @@
 ﻿using NLog.Targets;
-using System;
 using System.IO;
 
 namespace GACore.NLog;
@@ -25,8 +24,8 @@ public static class TargetFactory
 
 	private static void SetDefaultArchiveSettings(this FileTarget fileTarget, string fileName)
 	{
-		string directory = Path.GetDirectoryName(fileName);
-		string archiveDirectory = Path.Combine(directory, "archives");
+		string? directory = Path.GetDirectoryName(fileName) ?? throw new InvalidOperationException("File name is invalid");
+        string archiveDirectory = Path.Combine(directory, "archives");
 
 		DirectoryInfo info = new(archiveDirectory);
 

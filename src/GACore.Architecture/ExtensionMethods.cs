@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GACore.Architecture;
+﻿namespace GACore.Architecture;
 
 public static class ExtensionMethods
 {

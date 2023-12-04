@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Versioning;
 
 namespace GACore.Extensions.Test;
@@ -17,17 +15,22 @@ public class TIEnumerable_ExtensionMethods
     public void IEnumerable_Randomize()
     {
         IEnumerable<double> refData = GenerateOrderedIEnumerable(100);
-        IEnumerable<double> randomizedData = refData.Randomize();
+        IEnumerable<double>? randomizedData = refData.Randomize();
 
-        foreach (double value in refData)
+        Assert.That(randomizedData, Is.Not.Null);
+
+        if (randomizedData != null)
         {
-            Assert.That(randomizedData.Contains(value));
-        }
+            foreach (double value in refData)
+            {
+                Assert.That(randomizedData.Contains(value));
+            }
 
-        Assert.That(refData, Is.Not.EqualTo(randomizedData));
+            Assert.That(refData, Is.Not.EqualTo(randomizedData));
+        }
     }
 
-    private IEnumerable<double> GenerateOrderedIEnumerable(int numElements = 100)
+    private List<double> GenerateOrderedIEnumerable(int numElements = 100)
     {
         List<double> dataSet = [];
 

@@ -1,5 +1,4 @@
 ﻿using GAAPICommon.Architecture;
-using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace GACore.Controls;

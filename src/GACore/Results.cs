@@ -1,5 +1,4 @@
 ﻿using GACore.Architecture;
-using System;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("GACore.Test")]
@@ -7,12 +6,18 @@ namespace GACore;
 
 public class Result : IResult
 {
+    public Exception? Exception { get; }
+
+    public string FailureReason { get; } = string.Empty;
+
+    public bool IsSuccessful { get; } = false;
+
     public static Result FromSuccess()
     {
         return new Result();
     }
 
-    public static Result FromFailure(string failureReason = default)
+    public static Result FromFailure(string? failureReason = default)
     {
         return new Result(failureReason);
     }
@@ -29,7 +34,7 @@ public class Result : IResult
         Exception = null;
     }
 
-    protected Result(string failureReason)
+    protected Result(string? failureReason)
     {
         if (string.IsNullOrEmpty(failureReason))
             failureReason = "Unknown";
@@ -48,26 +53,28 @@ public class Result : IResult
         Exception = exception;
     }
 
-    public Exception Exception { get; } = null;
-
-    public string FailureReason { get; } = string.Empty;
-
-    public bool IsSuccessful { get; } = false;
-
-    public virtual string ToResultString() => IsSuccessful ? "Success"
+    public virtual string ToResultString()
+    {
+        return IsSuccessful ? "Success"
                 : string.Format("Failed: {0}", FailureReason);
+    }
 
-    public override string ToString() => ToResultString();
+    public override string ToString()
+    {
+        return ToResultString();
+    }
 }
 
 public class Result<T> : Result, IResult<T>
 {
+    public T? Value { get; } = default;
+
     public static Result<T> FromSuccess(T value)
     {
         return new Result<T>(value);
     }
 
-    public static new Result<T> FromFailure(string failureReason = default)
+    public static new Result<T> FromFailure(string? failureReason = default)
     {
         return new Result<T>(failureReason);
     }
@@ -83,7 +90,7 @@ public class Result<T> : Result, IResult<T>
         Value = value;
     }
 
-    protected Result(string failureReason)
+    protected Result(string? failureReason)
         : base(failureReason)
     {
         Value = default;
@@ -94,8 +101,6 @@ public class Result<T> : Result, IResult<T>
     {
         Value = default;
     }
-
-    public T Value { get; } = default;
 
     public override string ToResultString()
     {

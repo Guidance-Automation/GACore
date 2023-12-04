@@ -1,5 +1,4 @@
 ﻿using GACore.Architecture;
-using System;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -30,7 +29,7 @@ public class CompositionTargetControl : UserControl, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void CompositionTarget_Rendering(object sender, EventArgs e)
+    private void CompositionTarget_Rendering(object? sender, EventArgs e)
     {
         if ((_frameCount % OnFrames) == 0 && DataContext is IRefresh refresh)
             refresh.Refresh();

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GACore.Extensions;
+﻿namespace GACore.Extensions;
 
 /// <summary>
 /// Extension methods for List<T> to facliltate group delisting.
@@ -19,8 +15,8 @@ public static class List_ExtensionMethods
 
         for (int i = 0; i < list.Count - 1; i++)
         {
-            Type thisElem = list.ElementAt(i).GetType();
-            Type nextElem = list.ElementAt(i + 1).GetType();
+            Type? thisElem = list.ElementAt(i)?.GetType();
+            Type? nextElem = list.ElementAt(i + 1)?.GetType();
 
             if (thisElem != nextElem) return i + 1;
         }
@@ -38,8 +34,8 @@ public static class List_ExtensionMethods
 
         for (int i = 0; i < list.Count - 1; i++)
         {
-            Type thisElem = list.ElementAt(i).GetType();
-            Type nextElem = list.ElementAt(i + 1).GetType();
+            Type? thisElem = list.ElementAt(i)?.GetType();
+            Type? nextElem = list.ElementAt(i + 1)?.GetType();
 
             if (thisElem != nextElem) elementsGrouped++;
         }
@@ -55,11 +51,15 @@ public static class List_ExtensionMethods
 
         if (list.Count > 0)
         {
-            Type groupType = list[0].GetType();
-            while ((list.Count > 0) && (groupType.Equals(list[0].GetType())))
+            Type? groupType = list[0]?.GetType();
+            if (groupType != null)
             {
-                delisted.Add(list[0]);
-                list.RemoveAt(0);
+                while ((list.Count > 0) && (groupType.Equals(list[0]?.GetType())))
+                {
+                    delisted.Add(list[0]);
+                    list.RemoveAt(0);
+                }
+
             }
         }
 

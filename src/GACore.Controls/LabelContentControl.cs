@@ -24,7 +24,7 @@ public class LabelContentControl : ContentControl
 		((LabelContentControl)d).LayoutAlignment = (HorizontalAlignment)e.NewValue;
 	}
 
-	public string Header { get; set; }
+	public string? Header { get; set; }
 
 	private static void HeaderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 	{

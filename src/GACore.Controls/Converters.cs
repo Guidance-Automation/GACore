@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net;
 using System.Windows;
 using System.Windows.Data;
@@ -87,12 +86,12 @@ internal class IPAddressToByteConverter : IValueConverter
 
 internal class IsTrueColorConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         bool isTrue = (bool)value;
 
         return isTrue
-            ? (SolidColorBrush)(new BrushConverter().ConvertFrom("#C4D92E"))
+            ? (SolidColorBrush?)(new BrushConverter().ConvertFrom("#C4D92E"))
             : Brushes.Gray;
     }
 
@@ -104,7 +103,7 @@ internal class IsTrueColorConverter : IValueConverter
 
 public class NullableEnumStringConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return value == null
             ? "null"
@@ -112,7 +111,9 @@ public class NullableEnumStringConverter : IValueConverter
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        => throw new NotImplementedException();
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public class NullableBoolButtonStateStringConverter : IValueConverter

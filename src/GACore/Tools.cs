@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using GAAPICommon.Architecture;
 using Microsoft.Win32;
@@ -12,7 +11,7 @@ public static partial class Tools
 
     private static Regex _versionRegex { get; } = VersionRegex();
 
-    public static SemVer ParseVersionString(string value)
+    public static SemVer? ParseVersionString(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -33,7 +32,7 @@ public static partial class Tools
     }
 
     [SupportedOSPlatform("windows")]
-    public static FleetManagementMetadata GetInstalledFleetManagementMetadata()
+    public static FleetManagementMetadata? GetInstalledFleetManagementMetadata()
     {
         try
         {
@@ -42,15 +41,15 @@ public static partial class Tools
             if (baseKey == null)
                 return null;
 
-            RegistryKey fmKey = baseKey.OpenSubKey(@"SOFTWARE\GuidanceAutomation\Fleet Management");
+            RegistryKey? fmKey = baseKey.OpenSubKey(@"SOFTWARE\GuidanceAutomation\Fleet Management");
 
             if (fmKey == null)
                 return null;
 
-            string productName = (string)fmKey.GetValue("ProductName", null);
-            string versionString = (string)fmKey.GetValue("Version", null);
+            string? productName = fmKey.GetValue("ProductName", null)?.ToString();
+            string? versionString = fmKey.GetValue("Version", null)?.ToString();
 
-            SemVer semVer = ParseVersionString(versionString);
+            SemVer? semVer = ParseVersionString(versionString);
 
             return new FleetManagementMetadata(productName, semVer);
         }
@@ -60,10 +59,10 @@ public static partial class Tools
         }
     }
 
-    public static T RandomEnumValue<T>() where T : Enum
+    public static T? RandomEnumValue<T>() where T : Enum
     {
         Array values = Enum.GetValues(typeof(T));
-        return (T)values.GetValue(Random.Next(values.Length));
+        return (T?)values.GetValue(Random.Next(values.Length));
     }
 
     public static string GetTempFilenameWithExtension(string extension = ".xxx")

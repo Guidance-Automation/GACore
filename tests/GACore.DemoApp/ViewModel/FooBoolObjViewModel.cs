@@ -10,33 +10,33 @@ public class FooBoolObjViewModel : AbstractViewModel<FooBoolObj>
 {
 	public bool IsSet
 	{
-		get { return Model != null ? Model.IsSet : false; }
+		get { return Model != null && Model.IsSet; }
 		private set
 		{
-			if (Model != null) Model.ToggleIsSet();
-			OnNotifyPropertyChanged();
+            Model?.ToggleIsSet();
+            OnNotifyPropertyChanged();
 		}
 	}
 
-	protected override void HandleModelUpdate(FooBoolObj oldValue, FooBoolObj newValue)
+	protected override void HandleModelUpdate(FooBoolObj? oldValue, FooBoolObj? newValue)
 	{
-		OnNotifyPropertyChanged("IsSet");
+		OnNotifyPropertyChanged(nameof(IsSet));
 		base.HandleModelUpdate(oldValue, newValue);
 	}
 
-	public ICommand ClickCommand { get; set; }
+	public ICommand? ClickCommand { get; set; }
 
 	private void HandleCommands()
 	{
 		ClickCommand = new CustomCommand(ClickCommandClick, CanClickCommandClick);
 	}
 
-    private void ClickCommandClick(object obj)
+    private void ClickCommandClick(object? obj)
     {
         IsSet = false; // Forces recalc
     }
 
-    private bool CanClickCommandClick(object obj)
+    private bool CanClickCommandClick(object? obj)
     {
         return true;
     }

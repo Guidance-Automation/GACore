@@ -1,6 +1,5 @@
 ﻿using NLog;
 using NLog.Targets;
-using System;
 using System.Diagnostics;
 
 namespace GACore.NLog;
@@ -9,21 +8,21 @@ public static class ExtensionMethods
 {
 	public static void StartFilePathLoggerProcess(this Logger logger)
 	{
-		string filePath = logger.GetFilePath();
+		string? filePath = logger.GetFilePath();
 
 		if (!string.IsNullOrEmpty(filePath)) 
 			Process.Start(filePath);
 	}
 
-	public static string GetFilePath(this Logger logger)
+	public static string? GetFilePath(this Logger logger)
 	{
 		Target target = LogManager.Configuration.FindTargetByName(logger.Name);
 
 		if (target != null && target is FileTarget)
 		{
-			FileTarget fileTarget = target as FileTarget;
+			FileTarget? fileTarget = target as FileTarget;
 			LogEventInfo eventInfo = new() { };
-			return fileTarget.FileName.Render(eventInfo);
+			return fileTarget?.FileName.Render(eventInfo);
 		}
 
 		return null;

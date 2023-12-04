@@ -7,8 +7,8 @@ namespace GACore.NLog;
 /// </summary>
 public static class LoggerFactory
 {
-	public static Logger GetStandardLogger(StandardLogger standardLogger)
+	public static Logger? GetStandardLogger(StandardLogger standardLogger)
 	{
-		return NLogManager.Instance.GetFileTargetLogger(standardLogger.ToString());
+		return NLogManager.Instance?.GetFileTargetLogger(standardLogger.ToString());
 	}
 }

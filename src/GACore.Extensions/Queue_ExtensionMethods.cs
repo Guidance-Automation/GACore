@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace GACore.Extensions;
+﻿namespace GACore.Extensions;
 
 /// <summary>
 /// Extension methods for Queue<T> to facilitate group dequeuing.
@@ -21,9 +17,9 @@ public static class QueueExtensions
     /// <summary>
     /// Dequeues the item which matches the element
     /// </summary>
-    public static T DequeueMatching<T>(this Queue<T> queue, Predicate<T> predicate)
+    public static T? DequeueMatching<T>(this Queue<T> queue, Predicate<T> predicate)
     {
-        T item = default;
+        T? item = default;
         bool found = false;
         Queue<T> removed = new();
         while (queue.Count > 0)
@@ -56,8 +52,8 @@ public static class QueueExtensions
 
         for (int i = 0; i < queue.Count - 1; i++)
         {
-            Type thisElem = queue.ElementAt(i).GetType();
-            Type nextElem = queue.ElementAt(i + 1).GetType();
+            Type? thisElem = queue.ElementAt(i)?.GetType();
+            Type? nextElem = queue.ElementAt(i + 1)?.GetType();
 
             if (thisElem != nextElem) return i + 1;
         }
@@ -75,8 +71,8 @@ public static class QueueExtensions
 
         for (int i = 0; i < queue.Count - 1; i++)
         {
-            Type thisElem = queue.ElementAt(i).GetType();
-            Type nextElem = queue.ElementAt(i + 1).GetType();
+            Type? thisElem = queue.ElementAt(i)?.GetType();
+            Type? nextElem = queue.ElementAt(i + 1)?.GetType();
 
             if (thisElem != nextElem) elementsGrouped++;
         }

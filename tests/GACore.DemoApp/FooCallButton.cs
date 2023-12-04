@@ -43,7 +43,7 @@ public class FooCallButton : INotifyPropertyChanged
 		}
 	}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{

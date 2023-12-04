@@ -1,5 +1,4 @@
 ﻿using GAAPICommon.Architecture;
-using System;
 using System.ComponentModel;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -178,7 +177,7 @@ public class FooKingpinState : IKingpinState
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
