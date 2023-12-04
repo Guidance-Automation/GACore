@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GACore.Architecture
+namespace GACore.Architecture;
+
+public interface IModelCollection<T>
 {
-	public interface IModelCollection<T>
-	{
-		event Action<T> Added;
+    public event Action<T> Added;
 
-		event Action<T> Removed;
+    public event Action<T> Removed;
 
-		IEnumerable<T> GetModels();
-	}
+    public IEnumerable<T> GetModels();
 }

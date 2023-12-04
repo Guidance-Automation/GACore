@@ -1,7 +1,6 @@
-﻿namespace GACore.Architecture
+﻿namespace GACore.Architecture;
+
+public interface IRefresh
 {
-	public interface IRefresh
-	{
-		void Refresh();
-	}
+    public void Refresh();
 }

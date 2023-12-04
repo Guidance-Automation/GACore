@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Versioning;
 
-namespace GACore.UI.ViewModel
+namespace GACore.UI.ViewModel;
+
+[SupportedOSPlatform("windows")]
+public static class ViewModelLocator
 {
-	public static class ViewModelLocator
-	{
-		public static IPAddressViewModel IPAddressViewModel { get; } = new IPAddressViewModel();
-	}
+    public static IPAddressViewModel IPAddressViewModel { get; } = new IPAddressViewModel();
 }

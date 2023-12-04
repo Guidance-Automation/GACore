@@ -1,35 +1,31 @@
 ﻿using GAAPICommon.Architecture;
 using GACore.Architecture;
+using System.Runtime.Versioning;
 
-namespace GACore.DemoApp
+namespace GACore.DemoApp;
+
+public class FooKingpin : IKingpinStateReporter
 {
-	public class FooKingpin : IKingpinStateReporter
+	private IKingpinState _kingpinState = null;
+
+	public IKingpinState KingpinState
 	{
-		private IKingpinState kingpinState = null;
-
-		public IKingpinState KingpinState
-		{
-			get { return kingpinState; }
-			set 
-			{ 
-				kingpinState = value; 
-			}
+		get { return _kingpinState; }
+		set 
+		{ 
+			_kingpinState = value; 
 		}
+	}
 
-		public void Randomize()
-		{
-			KingpinState = new FooKingpinState();
-			//GACore.Controls.ViewModel.ViewModelFactory.KingpinStateReporterViewModel.
-		}
+    [SupportedOSPlatform("windows")]
+    public void Randomize()
+	{
+		KingpinState = new FooKingpinState();
+	}
 
-
-		public void SetGood()
-		{
-			KingpinState = FooKingpinState.FromGood();
-		}
-
-		public FooKingpin()
-		{
-		}
+    [SupportedOSPlatform("windows")]
+    public void SetGood()
+	{
+		KingpinState = FooKingpinState.FromGood();
 	}
 }

@@ -1,93 +1,91 @@
 ﻿using GAAPICommon.Architecture;
-using GACore.Architecture;
 using NUnit.Framework;
 using GAAPICommon.Core.Dtos;
 
-namespace GACore.Test
+namespace GACore.Test;
+
+[TestFixture]
+[Description("Kingpin Fault Diagnosis")]
+public class TKingpinFaultDiagnosis
 {
-	[TestFixture]
-	[Description("Kingpin Fault Diagnosis")]
-	public class TKingpinFaultDiagnosis
-	{
-		[Test]
-		public void CheckMotorLostFault()
-		{
-			KingpinFaultDiagnosis diagnosis = new KingpinFaultDiagnosis(GetMotorLostFault());
+    [Test]
+    public void CheckMotorLostFault()
+    {
+        KingpinFaultDiagnosis diagnosis = new(GetMotorLostFault());
 
-			Assert.IsTrue(diagnosis.IsInFault());
+        Assert.That(diagnosis.IsInFault());
 
-			Assert.IsNotNull(diagnosis.DynamicLimiterFault);
-			Assert.IsNull(diagnosis.ExtendedDataFault);
-			Assert.IsNotNull(diagnosis.NavigationFault);
-			Assert.IsNull(diagnosis.PCSFault);
+        Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
+        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+        Assert.That(diagnosis.NavigationFault, Is.Not.Null);
+        Assert.That(diagnosis.PCSFault, Is.Null);
 
-			Assert.AreEqual(diagnosis, GetMotorLostFault().Diagnose());
-			Assert.AreNotEqual(diagnosis, GetMotorFault().Diagnose());
-			Assert.AreNotEqual(diagnosis, GetNoFaultState().Diagnose());
-		}
+        Assert.That(diagnosis, Is.EqualTo(GetMotorLostFault().Diagnose()));
+        Assert.That(diagnosis, Is.Not.EqualTo(GetMotorFault().Diagnose()));
+        Assert.That(diagnosis, Is.Not.EqualTo(GetNoFaultState().Diagnose()));
+    }
 
-		[Test]
-		public void CheckMotorFault()
-		{
-			KingpinFaultDiagnosis diagnosis = new KingpinFaultDiagnosis(GetMotorFault());
+    [Test]
+    public void CheckMotorFault()
+    {
+        KingpinFaultDiagnosis diagnosis = new(GetMotorFault());
 
-			Assert.IsTrue(diagnosis.IsInFault());
+        Assert.That(diagnosis.IsInFault());
 
-			Assert.IsNotNull(diagnosis.DynamicLimiterFault);
-			Assert.IsNull(diagnosis.ExtendedDataFault);
-			Assert.IsNull(diagnosis.NavigationFault);
-			Assert.IsNull(diagnosis.PCSFault);
+        Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
+        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+        Assert.That(diagnosis.NavigationFault, Is.Null);
+        Assert.That(diagnosis.PCSFault, Is.Null);
 
-			Assert.AreEqual(diagnosis, GetMotorFault().Diagnose());
-			Assert.AreNotEqual(diagnosis, GetNoFaultState());
-		}
+        Assert.That(diagnosis, Is.EqualTo(GetMotorFault().Diagnose()));
+        Assert.That(diagnosis, Is.Not.EqualTo(GetNoFaultState().Diagnose()));
+    }
 
-		[Test]
-		public void CheckNoFault()
-		{
-			KingpinFaultDiagnosis diagnosis = new KingpinFaultDiagnosis(GetNoFaultState());
+    [Test]
+    public void CheckNoFault()
+    {
+        KingpinFaultDiagnosis diagnosis = new(GetNoFaultState());
 
-			Assert.IsFalse(diagnosis.IsInFault());
+        Assert.That(!diagnosis.IsInFault());
 
-			Assert.IsNull(diagnosis.DynamicLimiterFault);
-			Assert.IsNull(diagnosis.ExtendedDataFault);
-			Assert.IsNull(diagnosis.NavigationFault);
-			Assert.IsNull(diagnosis.PCSFault);
+        Assert.That(diagnosis.DynamicLimiterFault, Is.Null);
+        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+        Assert.That(diagnosis.NavigationFault, Is.Null);
+        Assert.That(diagnosis.PCSFault, Is.Null);
 
-			Assert.AreEqual(diagnosis, GetNoFaultState().Diagnose());
-		}
+        Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
+    }
 
-		private IKingpinState GetNoFaultState()
-		{
-			return new KingpinStateDto()
-			{
-				DynamicLimiterStatus = DynamicLimiterStatus.OK,
-				ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
-				NavigationStatus = NavigationStatus.OK,
-				PositionControlStatus = PositionControlStatus.OK
-			};
-		}
+    private static IKingpinState GetNoFaultState()
+    {
+        return new KingpinStateDto()
+        {
+            DynamicLimiterStatus = DynamicLimiterStatus.OK,
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
+            NavigationStatus = NavigationStatus.OK,
+            PositionControlStatus = PositionControlStatus.OK
+        };
+    }
 
-		private IKingpinState GetMotorLostFault()
-		{
-			return new KingpinStateDto()
-			{
-				DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
-				ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
-				NavigationStatus = NavigationStatus.Lost,
-				PositionControlStatus = PositionControlStatus.OK
-			};
-		}
+    private static IKingpinState GetMotorLostFault()
+    {
+        return new KingpinStateDto()
+        {
+            DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
+            NavigationStatus = NavigationStatus.Lost,
+            PositionControlStatus = PositionControlStatus.OK
+        };
+    }
 
-		private IKingpinState GetMotorFault()
-		{
-			return new KingpinStateDto()
-			{
-				DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
-				ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
-				NavigationStatus = NavigationStatus.OK,
-				PositionControlStatus = PositionControlStatus.OK
-			};
-		}
-	}
+    private static IKingpinState GetMotorFault()
+    {
+        return new KingpinStateDto()
+        {
+            DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
+            NavigationStatus = NavigationStatus.OK,
+            PositionControlStatus = PositionControlStatus.OK
+        };
+    }
 }

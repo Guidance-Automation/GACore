@@ -2,38 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GACore.Extensions
+namespace GACore.Extensions;
+
+public static class IEnumerable_ExtensionMethods
 {
-	public static class IEnumerable_ExtensionMethods
+    internal static Random Random { get; } = new Random(Guid.NewGuid().GetHashCode());
+
+    /// <summary>
+    /// Randomizes the contents of an IEnumerable
+    /// </summary>
+    public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable)
 	{
-		private static Random random = new Random(Guid.NewGuid().GetHashCode());
+		if (enumerable == null) return null;
 
-		internal static Random Random => random;
+		List<T> dataSet = new(enumerable);
+		List<T> randomDataSet = [];
 
-		/// <summary>
-		/// Randomizes the contents of an IEnumerable
-		/// </summary>
-		public static IEnumerable<T> Randomize<T>(this IEnumerable<T> enumerable)
+		for (int i = dataSet.Count; i > 0; i--)
 		{
-			if (enumerable == null) return null;
-
-			List<T> dataSet = new List<T>(enumerable);
-			List<T> randomDataSet = new List<T>();
-
-			for (int i = dataSet.Count; i > 0; i--)
-			{
-				int randomIndex = random.Next(0, i);
-				randomDataSet.Add(dataSet[randomIndex]);
-				dataSet.RemoveAt(randomIndex);
-			}
-
-			return randomDataSet;
+			int randomIndex = Random.Next(0, i);
+			randomDataSet.Add(dataSet[randomIndex]);
+			dataSet.RemoveAt(randomIndex);
 		}
 
-		/// <summary>
-		/// Clones an IEnumerable<T> where T : ICloneable
-		/// </summary>
-		public static IEnumerable<T> Clone<T>(this IEnumerable<T> enumerableToClone) where T : ICloneable
-			=> enumerableToClone.ToList().Select(e => (T)e.Clone()).ToList();
+		return randomDataSet;
 	}
+
+    /// <summary>
+    /// Clones an IEnumerable<T> where T : ICloneable
+    /// </summary>
+    public static IEnumerable<T> Clone<T>(this IEnumerable<T> enumerableToClone) where T : ICloneable
+    {
+        return enumerableToClone.ToList().Select(e => (T)e.Clone()).ToList();
+    }
 }

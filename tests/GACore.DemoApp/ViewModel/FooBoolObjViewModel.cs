@@ -1,44 +1,48 @@
 ﻿using GACore.Command;
 using GACore.DemoApp.Model;
-using System;
+using System.Runtime.Versioning;
 using System.Windows.Input;
 
-namespace GACore.DemoApp.ViewModel
+namespace GACore.DemoApp.ViewModel;
+
+[SupportedOSPlatform("windows")]
+public class FooBoolObjViewModel : AbstractViewModel<FooBoolObj>
 {
-	public class FooBoolObjViewModel : AbstractViewModel<FooBoolObj>
+	public bool IsSet
 	{
-		public bool IsSet
+		get { return Model != null ? Model.IsSet : false; }
+		private set
 		{
-			get { return Model != null ? Model.IsSet : false; }
-			private set
-			{
-				if (Model != null) Model.ToggleIsSet();
-				OnNotifyPropertyChanged();
-			}
+			if (Model != null) Model.ToggleIsSet();
+			OnNotifyPropertyChanged();
 		}
+	}
 
-		private void HandleToggleIsSet() => IsSet = false; // Set forces recalc
+	protected override void HandleModelUpdate(FooBoolObj oldValue, FooBoolObj newValue)
+	{
+		OnNotifyPropertyChanged("IsSet");
+		base.HandleModelUpdate(oldValue, newValue);
+	}
 
-		protected override void HandleModelUpdate(FooBoolObj oldValue, FooBoolObj newValue)
-		{
-			OnNotifyPropertyChanged("IsSet");
-			base.HandleModelUpdate(oldValue, newValue);
-		}
+	public ICommand ClickCommand { get; set; }
 
-		public ICommand ClickCommand { get; set; }
+	private void HandleCommands()
+	{
+		ClickCommand = new CustomCommand(ClickCommandClick, CanClickCommandClick);
+	}
 
-		private void HandleCommands()
-		{
-			ClickCommand = new CustomCommand(ClickCommandClick, CanClickCommandClick);
-		}
+    private void ClickCommandClick(object obj)
+    {
+        IsSet = false; // Forces recalc
+    }
 
-		private void ClickCommandClick(object obj) => IsSet = false; // Forces recalc
+    private bool CanClickCommandClick(object obj)
+    {
+        return true;
+    }
 
-		private bool CanClickCommandClick(object obj) => true;
-
-		public FooBoolObjViewModel()
-		{
-			HandleCommands();
-		}
+    public FooBoolObjViewModel()
+	{
+		HandleCommands();
 	}
 }

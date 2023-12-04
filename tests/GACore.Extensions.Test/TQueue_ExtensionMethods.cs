@@ -1,34 +1,37 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 
-namespace GACore.Extensions.Test
+namespace GACore.Extensions.Test;
+
+[TestFixture]
+[Category("ExtensionMethods")]
+[SupportedOSPlatform("windows")]
+public class TQueue_ExtensionMethods
 {
-	[TestFixture]
-	[Category("ExtensionMethods")]
-	public class TQueue_ExtensionMethods
-	{
-		[Test]
-		public void DequeueMatching()
-		{
-			Queue<int> queue = new Queue<int>();
-			queue.EnqueueAll(new[] { 1, 2, 3, 4, 5, 6 });
-			Assert.AreEqual(6, queue.Count);
-			CollectionAssert.Contains(queue, 4);
+    private static readonly int[] _additions = [1, 2, 3, 4, 5, 6];
 
-			Assert.Throws(typeof(ArgumentOutOfRangeException), delegate { queue.DequeueMatching(i => i == 7); });
-			var dequeued = queue.DequeueMatching(i => i == 4);
+    [Test]
+    public void DequeueMatching()
+    {
+        Queue<int> queue = new();
+        queue.EnqueueAll(_additions);
+        Assert.That(6, Is.EqualTo(queue.Count));
+        Assert.That(queue, Does.Contain(4));
 
-			Assert.AreEqual(4, dequeued);
-			Assert.AreEqual(5, queue.Count);
+        Assert.Throws(typeof(ArgumentOutOfRangeException), delegate { queue.DequeueMatching(i => i == 7); });
+        int dequeued = queue.DequeueMatching(i => i == 4);
 
-			CollectionAssert.DoesNotContain(queue, 4);
+        Assert.That(dequeued, Is.EqualTo(4));
+        Assert.That(queue.Count, Is.EqualTo(5));
 
-			CollectionAssert.Contains(queue, 1);
-			CollectionAssert.Contains(queue, 2);
-			CollectionAssert.Contains(queue, 3);
-			CollectionAssert.Contains(queue, 5);
-			CollectionAssert.Contains(queue, 6);
-		}
-	}
+        Assert.That(queue, Does.Not.Contain(4));
+
+        Assert.That(queue, Does.Contain(1));
+        Assert.That(queue, Does.Contain(2));
+        Assert.That(queue, Does.Contain(3));
+        Assert.That(queue, Does.Contain(5));
+        Assert.That(queue, Does.Contain(6));
+    }
 }

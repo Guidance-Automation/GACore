@@ -1,49 +1,46 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Threading;
-using GACore;
-using GACore.NLog;
 using NLog;
 
-namespace GACore.Test
+namespace GACore.Test;
+
+[TestFixture]
+public class TViewModel
 {
-	[TestFixture]
-	public class TViewModel
-	{
-		private AutoResetEvent propertyChangedSet = new AutoResetEvent(false);
+    private readonly AutoResetEvent _propertyChangedSet = new(false);
 
-		private TimeSpan timeout { get; } = TimeSpan.FromSeconds(5);
+    private TimeSpan Timeout { get; } = TimeSpan.FromSeconds(5);
 
-		[OneTimeSetUp]
-		public void OneTimeSetUp()
-		{
-			GACore.NLog.NLogManager.Instance.LogLevel = LogLevel.Trace;
-		}
+    [OneTimeSetUp]
+    public void OneTimeSetUp()
+    {
+        GACore.NLog.NLogManager.Instance.LogLevel = LogLevel.Trace;
+    }
 
-		[Test]
-		public void PropertyChanged()
-		{
-			FooModel fooModel = new FooModel();
-			FooViewModel fooViewModel = new FooViewModel();
-			fooViewModel.PropertyChanged += FooViewModel_PropertyChanged;
+    [Test]
+    public void PropertyChanged()
+    {
+        FooModel fooModel = new();
+        FooViewModel fooViewModel = new();
+        fooViewModel.PropertyChanged += FooViewModel_PropertyChanged;
 
-			Assert.IsNull(fooViewModel.Model);
+        Assert.That(fooViewModel.Model, Is.Null);
 
-			fooViewModel.Model = fooModel;
+        fooViewModel.Model = fooModel;
 
-			Assert.IsTrue(propertyChangedSet.WaitOne(timeout));
-			Assert.AreEqual(fooModel,fooViewModel.Model);
+        Assert.That(_propertyChangedSet.WaitOne(Timeout));
+        Assert.That(fooModel, Is.EqualTo(fooViewModel.Model));
 
-			fooViewModel.Model = null;
+        fooViewModel.Model = null;
 
-			Assert.IsTrue(propertyChangedSet.WaitOne(timeout));
-			Assert.AreEqual(null, fooViewModel.Model);
-		}
+        Assert.That(_propertyChangedSet.WaitOne(Timeout));
+        Assert.That(fooViewModel.Model, Is.Null);
+    }
 
-		private void FooViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			Assert.AreEqual("Model", e.PropertyName);
-			propertyChangedSet.Set();
-		}
-	}
+    private void FooViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        Assert.That(e.PropertyName, Is.EqualTo("Model"));
+        _propertyChangedSet.Set();
+    }
 }

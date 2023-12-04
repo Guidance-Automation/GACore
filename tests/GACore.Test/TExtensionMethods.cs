@@ -2,25 +2,26 @@
 using GAAPICommon.Core.Dtos;
 using GACore.Architecture;
 using NUnit.Framework;
+using System;
 
-namespace GACore.Test
+namespace GACore.Test;
+
+[TestFixture]
+public class TExtensionMethods
 {
-	[TestFixture]
-	public class TExtensionMethods
-	{
-		[Test]
-		public void ToSemVerDto()
-		{
-			ISemVer semVer = new SemVer(1, 2, 3, ReleaseFlag.Beta);
+    [Test]
+    public void ToSemVerDto()
+    {
+        ISemVer semVer = new SemVer(1, 2, 3, ReleaseFlag.Beta);
 
-			SemVerDto semVerDto = semVer.ToSemVerDto();
+        SemVerDto semVerDto = semVer.ToSemVerDto();
 
-			Assert.IsNotNull(semVerDto);
+        Assert.That(semVerDto, Is.Not.Null);
 
-			Assert.AreEqual(1, semVerDto.Major);
-			Assert.AreEqual(2, semVerDto.Minor);
-			Assert.AreEqual(3, semVerDto.Patch);
-			StringAssert.AreEqualIgnoringCase("Beta", semVerDto.ReleaseFlag);
-		}
-	}
+        Assert.That(semVerDto.Major, Is.EqualTo(1));
+        Assert.That(semVerDto.Minor, Is.EqualTo(2));
+        Assert.That(semVerDto.Patch, Is.EqualTo(3));
+
+        Assert.That(string.Equals(semVerDto.ReleaseFlag, "Beta", StringComparison.OrdinalIgnoreCase));
+    }
 }

@@ -8,160 +8,159 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace GACore
+namespace GACore;
+
+public abstract class AbstractCollectionViewModel<T, U, V> : AbstractViewModel<T>, ICollectionViewModel<T, U, V>
+		where T : class, IModelCollection<V>
+		where U : AbstractViewModel<V>, new()
+		where V : class
 {
-	public abstract class AbstractCollectionViewModel<T, U, V> : AbstractViewModel<T>, ICollectionViewModel<T, U, V>
-			where T : class, IModelCollection<V>
-			where U : AbstractViewModel<V>, new()
-			where V : class
+	protected ObservableCollection<U> viewModels = [];
+
+	public void Dispose() => Dispose(true);
+
+	public AbstractCollectionViewModel()
 	{
-		protected ObservableCollection<U> viewModels = new ObservableCollection<U>();
+		ViewModels = new ReadOnlyObservableCollection<U>(viewModels);
+	}
 
-		public void Dispose() => Dispose(true);
+	~AbstractCollectionViewModel()
+	{
+		Dispose(false);
+	}
 
-		public AbstractCollectionViewModel()
+	public ReadOnlyObservableCollection<U> ViewModels { get; }
+
+	private bool _isDisposed = false;
+
+	private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+
+	private async Task HandleAddCollectionItemModel(V collectionItemModel)
+	{
+		if (collectionItemModel == null)
 		{
-			ViewModels = new ReadOnlyObservableCollection<U>(viewModels);
+			Logger.Warn("[{0}] HandleAddCollectionItemModel() collectionItemModel was null", GetType().Name);
+			return;
 		}
 
-		~AbstractCollectionViewModel()
+		await _semaphoreSlim.WaitAsync();
+
+		try
 		{
-			Dispose(false);
-		}
-
-		public ReadOnlyObservableCollection<U> ViewModels { get; }
-
-		private bool isDisposed = false;
-
-		private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-
-		private async Task HandleAddCollectionItemModel(V collectionItemModel)
-		{
-			if (collectionItemModel == null)
+			// To solve race condition when getting an item added while the model is changed. 
+			if (viewModels.Select(e => e.Model).Any(e => e.Equals(collectionItemModel)))
 			{
-				Logger.Warn("[{0}] HandleAddCollectionItemModel() collectionItemModel was null", GetType().Name);
+				Logger.Warn("[{0}] HandleAddCollectionItemModel() viewModels already contains a collectionItemViewModel for this collectionItemModel", GetType().Name);
 				return;
 			}
 
-			await semaphoreSlim.WaitAsync();
-
-			try
-			{
-				// To solve race condition when getting an item added while the model is changed. 
-				if (viewModels.Select(e => e.Model).Any(e => e.Equals(collectionItemModel)))
-				{
-					Logger.Warn("[{0}] HandleAddCollectionItemModel() viewModels already contains a collectionItemViewModel for this collectionItemModel", GetType().Name);
-					return;
-				}
-
-				U collectionItemViewModel = new U() { Model = collectionItemModel };
-
-				await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() =>
-				{
-					viewModels.Add(collectionItemViewModel);
-				}));
-
-				Logger.Trace("[{0}] HandleAddCollectionItemModel() added: {1}", GetType().Name, collectionItemModel);
-			}
-			catch(Exception ex)
-			{
-				Logger.Error(ex);
-			}
-			finally
-			{
-				semaphoreSlim.Release();
-			}
-		}
-
-		protected async void HandleCollectionRefresh()
-		{
-			Logger.Trace("[{0}] HandleCollectionRefresh()", GetType().Name);
+			U collectionItemViewModel = new() { Model = collectionItemModel };
 
 			await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() =>
 			{
-				viewModels.Clear();
+				viewModels.Add(collectionItemViewModel);
 			}));
 
-			if (Model == null) return;
-
-			IEnumerable<V> existingModels = Model.GetModels();
-
-			Logger.Trace("[{0}] HandleCollectionRefresh() adding {1} existing model(s)", GetType().Name, existingModels.Count());
-
-			foreach (V model in existingModels)
-			{
-				await HandleAddCollectionItemModel(model);
-			}
+			Logger.Trace("[{0}] HandleAddCollectionItemModel() added: {1}", GetType().Name, collectionItemModel);
 		}
-
-		protected override void HandleModelUpdate(T oldValue, T newValue)
+		catch(Exception ex)
 		{
-			if (oldValue != null) oldValue.Added -= Model_Added;
-			if (oldValue != null) oldValue.Removed -= Model_Removed;
-
-			if (newValue != null) newValue.Added += Model_Added;
-			if (newValue != null) newValue.Removed += Model_Removed;
-
-			base.HandleModelUpdate(oldValue, newValue);
-			HandleCollectionRefresh();
+			Logger.Error(ex);
 		}
-
-		public abstract U GetViewModelForModel(V model);
-
-		private async void Model_Removed(V obj)
+		finally
 		{
-			if (obj == null)
+			_semaphoreSlim.Release();
+		}
+	}
+
+	protected async void HandleCollectionRefresh()
+	{
+		Logger.Trace("[{0}] HandleCollectionRefresh()", GetType().Name);
+
+		await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() =>
+		{
+			viewModels.Clear();
+		}));
+
+		if (Model == null) return;
+
+		IEnumerable<V> existingModels = Model.GetModels();
+
+		Logger.Trace("[{0}] HandleCollectionRefresh() adding {1} existing model(s)", GetType().Name, existingModels.Count());
+
+		foreach (V model in existingModels)
+		{
+			await HandleAddCollectionItemModel(model);
+		}
+	}
+
+	protected override void HandleModelUpdate(T oldValue, T newValue)
+	{
+		if (oldValue != null) oldValue.Added -= Model_Added;
+		if (oldValue != null) oldValue.Removed -= Model_Removed;
+
+		if (newValue != null) newValue.Added += Model_Added;
+		if (newValue != null) newValue.Removed += Model_Removed;
+
+		base.HandleModelUpdate(oldValue, newValue);
+		HandleCollectionRefresh();
+	}
+
+	public abstract U GetViewModelForModel(V model);
+
+	private async void Model_Removed(V obj)
+	{
+		if (obj == null)
+		{
+			Logger.Warn("[{0}] Model_Removed() obj was null", GetType().Name);
+			return;
+		}
+		
+		await _semaphoreSlim.WaitAsync();
+
+		try
+		{
+			U viewModel = GetViewModelForModel(obj);
+
+			if (viewModel == null)
 			{
-				Logger.Warn("[{0}] Model_Removed() obj was null", GetType().Name);
+				Logger.Warn("[{0}] Model_Removed() GetViewModelForModel() returned null", GetType().Name);
 				return;
 			}
-			
-			await semaphoreSlim.WaitAsync();
 
-			try
+			await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() =>
 			{
-				U viewModel = GetViewModelForModel(obj);
-
-				if (viewModel == null)
-				{
-					Logger.Warn("[{0}] Model_Removed() GetViewModelForModel() returned null", GetType().Name);
-					return;
-				}
-
-				await Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() =>
-				{
-					viewModels.Remove(viewModel);
-				}));
-			}
-			catch (Exception ex)
-			{
-				Logger.Error(ex);
-			}
-
-			finally
-			{
-				semaphoreSlim.Release();
-			}
+				viewModels.Remove(viewModel);
+			}));
 		}
-
-		private async void Model_Added(V obj)
+		catch (Exception ex)
 		{
-			Logger.Trace("[{0}] Model_Added()", GetType().Name);
-
-			await HandleAddCollectionItemModel(obj);
+			Logger.Error(ex);
 		}
 
-		protected virtual void Dispose(bool isDisposing)
+		finally
 		{
-			if (isDisposed) return;
-
-			if (isDisposing)
-			{
-				if (Model != null) Model.Added -= Model_Added;
-				if (Model != null) Model.Removed -= Model_Removed;
-			}
-
-			isDisposed = true;
+			_semaphoreSlim.Release();
 		}
+	}
+
+	private async void Model_Added(V obj)
+	{
+		Logger.Trace("[{0}] Model_Added()", GetType().Name);
+
+		await HandleAddCollectionItemModel(obj);
+	}
+
+	protected virtual void Dispose(bool isDisposing)
+	{
+		if (_isDisposed) return;
+
+		if (isDisposing)
+		{
+			if (Model != null) Model.Added -= Model_Added;
+			if (Model != null) Model.Removed -= Model_Removed;
+		}
+
+		_isDisposed = true;
 	}
 }

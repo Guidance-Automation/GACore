@@ -1,12 +1,6 @@
-﻿namespace GACore.UI.Message
-{
-    public class DialogShutdownMessage<T> where T : System.Enum
-    {
-        public T DialogSource { get; }
+﻿namespace GACore.UI.Message;
 
-        public DialogShutdownMessage(T dialogSource)
-        {
-            DialogSource = dialogSource;
-        }
-    }
+public class DialogShutdownMessage<T>(T dialogSource) where T : System.Enum
+{
+    public T DialogSource { get; } = dialogSource;
 }

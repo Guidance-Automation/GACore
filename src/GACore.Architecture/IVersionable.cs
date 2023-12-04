@@ -1,7 +1,6 @@
-﻿namespace GACore.Architecture
+﻿namespace GACore.Architecture;
+
+public interface IVersionable
 {
-    public interface IVersionable
-    {
-        ISemVer Version { get; }
-    }
+    public ISemVer Version { get; }
 }

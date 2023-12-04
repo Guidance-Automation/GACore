@@ -1,9 +1,8 @@
 ﻿using GAAPICommon.Architecture;
 
-namespace GACore.Architecture
+namespace GACore.Architecture;
+
+public interface IKingpinStateReporter
 {
-	public interface IKingpinStateReporter
-	{
-		IKingpinState KingpinState { get; }
-	}
+    public IKingpinState KingpinState { get; }
 }

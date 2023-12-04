@@ -1,7 +1,6 @@
-﻿namespace GACore.Extensions.Test.TestObjects
+﻿namespace GACore.Extensions.Test.TestObjects;
+
+public class FooA : AbstractFoo
 {
-	public class FooA : AbstractFoo
-	{
-		public override string ClassType => "DummyClassA";
-	}
+    public override string ClassType => "DummyClassA";
 }

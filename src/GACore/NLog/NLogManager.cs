@@ -8,127 +8,120 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace GACore.NLog
+namespace GACore.NLog;
+
+/// <summary>
+/// Singleton wrapper around NLog to manage loggers.
+/// </summary>
+public class NLogManager : INotifyPropertyChanged
 {
-	/// <summary>
-	/// Singleton wrapper around NLog to manage loggers.
-	/// </summary>
-	public class NLogManager : INotifyPropertyChanged
+    private LogLevel _logLevel = LogLevel.Info;
+    private string _logDir = Path.Combine(new string[] { Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Guidance Automation", @"Logs" });
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+	public string LogDir
 	{
-		private static NLogManager instance = new NLogManager();
+		get { return _logDir; }
 
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private string logDir = Path.Combine(new string[] { Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Guidance Automation", @"Logs" });
-
-		public string LogDir
+		set
 		{
-			get { return logDir; }
+			if (string.IsNullOrEmpty(value)) throw new InvalidOperationException($"{nameof(_logDir)} failed to set.");
 
-			set
+			if (_logDir != value)
 			{
-				if (string.IsNullOrEmpty(value)) throw new ArgumentNullException("logDir");
+				_logDir = value;
+				OnNotifyPropertyChanged();
+			}
+		}
+	}
 
-				if (logDir != value)
+    public static NLogManager Instance { get; } = new();
+
+    private readonly object _lockObject = new();
+
+	public NLogManager()
+	{
+	}
+
+	public IEnumerable<Logger> GetLoggers()
+	{
+		List<Logger> loggers = [];
+
+		if (LogManager.Configuration != null)
+		{
+			foreach (Target target in LogManager.Configuration.AllTargets.ToList())
+			{
+				loggers.Add(LogManager.GetLogger(target.Name));
+			}
+		}
+
+		return loggers;
+	}
+
+	public LogLevel LogLevel
+	{
+		get { return _logLevel; }
+
+		set
+		{
+			lock (_lockObject)
+			{
+				if (_logLevel != value)
 				{
-					logDir = value;
+					_logLevel = value;
+
+					if (LogManager.Configuration == null) HandleNullConfiguration();
+
+					foreach (LoggingRule rule in LogManager.Configuration.LoggingRules)
+					{
+						rule.SetLoggingLevels(_logLevel, LogLevel.Fatal);
+					}
+
+					LogManager.ReconfigExistingLoggers();
 					OnNotifyPropertyChanged();
 				}
 			}
 		}
+	}
 
-		public static NLogManager Instance => instance;
-
-		private readonly object lockObject = new object();
-
-		public NLogManager()
+	public Logger GetFileTargetLogger(string name)
+	{
+		lock (_lockObject)
 		{
-		}
+			if (LogManager.Configuration == null) HandleNullConfiguration();
 
-		public IEnumerable<Logger> GetLoggers()
-		{
-			List<Logger> loggers = new List<Logger>();
+			name = name.ToLowerInvariant();
+			Logger existing = GetLoggers().FirstOrDefault(e => e.Name == name);
 
-			if (LogManager.Configuration != null)
-			{
-				foreach (Target target in LogManager.Configuration.AllTargets.ToList())
-				{
-					loggers.Add(LogManager.GetLogger(target.Name));
-				}
-			}
+			if (existing != null) return existing;
 
-			return loggers;
-		}
+			string fileName = Path.Combine(new[] { LogDir, name + ".log" });
 
-		private LogLevel logLevel = LogLevel.Info;
+			FileInfo info = new(fileName);
 
-		public LogLevel LogLevel
-		{
-			get { return logLevel; }
+			if (!info.Directory.Exists) Directory.CreateDirectory(info.Directory.FullName);
 
-			set
-			{
-				lock (lockObject)
-				{
-					if (logLevel != value)
-					{
-						logLevel = value;
+			FileTarget target = TargetFactory.GetDefaultFileTarget(name, fileName);
 
-						if (LogManager.Configuration == null) HandleNullConfiguration();
+			LoggingRule rule = new(name, LogLevel, target);
+			LogManager.Configuration.LoggingRules.Add(rule);
+			LogManager.Configuration.AddTarget(target);
 
-						foreach (LoggingRule rule in LogManager.Configuration.LoggingRules)
-						{
-							rule.SetLoggingLevels(logLevel, LogLevel.Fatal);
-						}
+			LogManager.ReconfigExistingLoggers();
 
-						LogManager.ReconfigExistingLoggers();
-						OnNotifyPropertyChanged();
-					}
-				}
-			}
-		}
-
-		public Logger GetFileTargetLogger(string name)
-		{
-			lock (lockObject)
-			{
-				if (LogManager.Configuration == null) HandleNullConfiguration();
-
-				name = name.ToLowerInvariant();
-				Logger existing = GetLoggers().FirstOrDefault(e => e.Name == name);
-
-				if (existing != null) return existing;
-
-				string fileName = Path.Combine(new[] { LogDir, name + ".log" });
-
-				FileInfo info = new FileInfo(fileName);
-
-				if (!info.Directory.Exists) Directory.CreateDirectory(info.Directory.FullName);
-
-				FileTarget target = TargetFactory.GetDefaultFileTarget(name, fileName);
-
-				LoggingRule rule = new LoggingRule(name, LogLevel, target);
-				LogManager.Configuration.LoggingRules.Add(rule);
-				LogManager.Configuration.AddTarget(target);
-
-				LogManager.ReconfigExistingLoggers();
-
-				return GetLoggers().FirstOrDefault(e => e.Name == name);
-			}
-		}
-
-		private void HandleNullConfiguration()
-		{
-			LogManager.Configuration = new LoggingConfiguration();
-			Directory.CreateDirectory(LogDir);
-		}
-
-		protected void OnNotifyPropertyChanged([CallerMemberName] String propertyName = "")
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			return GetLoggers().FirstOrDefault(e => e.Name == name);
 		}
 	}
+
+	private void HandleNullConfiguration()
+	{
+		LogManager.Configuration = new LoggingConfiguration();
+		Directory.CreateDirectory(LogDir);
+	}
+
+	protected void OnNotifyPropertyChanged([CallerMemberName] string propertyName = "")
+	{
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
-namespace GACore.DemoApp.Service
+namespace GACore.DemoApp.Service;
+
+public static class DialogService
 {
-	public static class DialogService
+	public static Window CreateFooWizardWindow()
 	{
-		public static Window CreateFooWizardWindow()
-		{
-			FooWizardWindow window = new FooWizardWindow();
-
-			return window;
-		}
+		FooWizardWindow window = new();
+		return window;
 	}
 }

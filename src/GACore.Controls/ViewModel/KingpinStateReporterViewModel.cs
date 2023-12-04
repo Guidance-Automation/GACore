@@ -1,225 +1,223 @@
 ﻿using GAAPICommon.Architecture;
 using GACore.Architecture;
 using System.Net;
-using System.Windows.Media;
 
-namespace GACore.Controls.ViewModel
+namespace GACore.Controls.ViewModel;
+
+public class KingpinStateReporterViewModel : AbstractViewModel<IKingpinStateReporter>, IRefresh
 {
-	public class KingpinStateReporterViewModel : AbstractViewModel<IKingpinStateReporter>, IRefresh
-	{
-		protected override void HandleModelUpdate(IKingpinStateReporter oldValue, IKingpinStateReporter newValue)
-		{
-			base.HandleModelUpdate(oldValue, newValue);
-			Refresh();
-		}
+    protected override void HandleModelUpdate(IKingpinStateReporter oldValue, IKingpinStateReporter newValue)
+    {
+        base.HandleModelUpdate(oldValue, newValue);
+        Refresh();
+    }
 
-		private string alias = string.Empty;
+    private string _alias = string.Empty;
 
-		public string Alias
-		{
-			get { return alias; }
-			private set
-			{
-				if (alias != value)
-				{
-					alias = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+    public string Alias
+    {
+        get { return _alias; }
+        private set
+        {
+            if (_alias != value)
+            {
+                _alias = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
-		private IPAddress ipAddress = null;
+    private IPAddress _ipAddress = null;
 
-		public IPAddress IPAddress
-		{
-			get { return ipAddress; }
-			private set
-			{
-				if (ipAddress != value)
-				{
-					ipAddress = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+    public IPAddress IPAddress
+    {
+        get { return _ipAddress; }
+        private set
+        {
+            if (_ipAddress != value)
+            {
+                _ipAddress = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
-		private MovementType currentMovementType = MovementType.Stationary;
+    private MovementType _currentMovementType = MovementType.Stationary;
 
-		public MovementType CurrentMovementType
-		{
-			get { return currentMovementType; }
-			private set
-			{
-				if (currentMovementType != value)
-				{
-					currentMovementType = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+    public MovementType CurrentMovementType
+    {
+        get { return _currentMovementType; }
+        private set
+        {
+            if (_currentMovementType != value)
+            {
+                _currentMovementType = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
 
-		private float x = float.NaN;
+    private float _x = float.NaN;
 
-		public float X
-		{
-			get { return x; }
-			private set
-			{
-				if (x != value)
-				{
-					x = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+    public float X
+    {
+        get { return _x; }
+        private set
+        {
+            if (_x != value)
+            {
+                _x = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
-		private float y = float.NaN;
+    private float _y = float.NaN;
 
-		public float Y
-		{
-			get { return x; }
-			private set
-			{
-				if (y != value)
-				{
-					y = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
-
-
-		private float heading = float.NaN;
-
-		public float Heading
-		{
-			get { return heading; }
-			private set
-			{
-				if (heading != value)
-				{
-					heading = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
-
-		private bool isInFault = false;
-		
-		public bool IsInFault
-		{
-			get { return isInFault; }
-			private set
-			{
-				if (isInFault != value)
-				{
-					isInFault = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
-
-		public void Refresh()
-		{
-			IKingpinState toProcess = Model?.KingpinState;
-
-			if (toProcess != null)
-			{
-				Alias = toProcess.Alias;
-				ipAddress = toProcess.IPAddress;
-				IsVirtual = toProcess.IsVirtual;
-
-				CurrentMovementType = toProcess.CurrentMovementType;
-
-				X = toProcess.X;
-				Y = toProcess.Y;
-				Heading = toProcess.Heading;
-
-				DynamicLimiterStatus = toProcess.DynamicLimiterStatus;
-				NavigationStatus = toProcess.NavigationStatus;
-				PositionControlStatus = toProcess.PositionControlStatus;
-				IsInFault = toProcess.IsInFault();
-			}
-			else
-			{
-				Alias = string.Empty;
-				IPAddress = null;
-				IsVirtual = false;
-
-				CurrentMovementType = MovementType.Stationary;
-
-				X = float.NaN;
-				Y = float.NaN;
-				Heading = float.NaN;
-
-				DynamicLimiterStatus = DynamicLimiterStatus.Unknown;
-				NavigationStatus = NavigationStatus.Unknown;
-				PositionControlStatus = PositionControlStatus.Unknown;
-				IsInFault = false;
-			}
+    public float Y
+    {
+        get { return _x; }
+        private set
+        {
+            if (_y != value)
+            {
+                _y = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
 
-		}
+    private float _heading = float.NaN;
 
-		private DynamicLimiterStatus dynamicLimiterStatus = DynamicLimiterStatus.Unknown;
+    public float Heading
+    {
+        get { return _heading; }
+        private set
+        {
+            if (_heading != value)
+            {
+                _heading = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
-		private NavigationStatus navigationStatus = NavigationStatus.Unknown;
+    private bool _isInFault = false;
 
-		private PositionControlStatus positionControlStatus = PositionControlStatus.Unknown;
+    public bool IsInFault
+    {
+        get { return _isInFault; }
+        private set
+        {
+            if (_isInFault != value)
+            {
+                _isInFault = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 
-		public NavigationStatus NavigationStatus
-		{
-			get { return navigationStatus; }
-			private set
-			{
-				if (navigationStatus != value)
-				{
-					navigationStatus = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+    public void Refresh()
+    {
+        IKingpinState toProcess = Model?.KingpinState;
 
-		public PositionControlStatus PositionControlStatus
-		{
-			get { return positionControlStatus; }
-			private set
-			{
-				if (positionControlStatus != value)
-				{
-					positionControlStatus = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+        if (toProcess != null)
+        {
+            Alias = toProcess.Alias;
+            _ipAddress = toProcess.IPAddress;
+            IsVirtual = toProcess.IsVirtual;
 
-		private bool isVirtual = false;
+            CurrentMovementType = toProcess.CurrentMovementType;
 
-		public bool IsVirtual
-		{
-			get { return isVirtual; }
-			private set
-			{
-				if (isVirtual != value)
-				{
-					isVirtual = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
+            X = toProcess.X;
+            Y = toProcess.Y;
+            Heading = toProcess.Heading;
 
-		public DynamicLimiterStatus DynamicLimiterStatus
-		{
-			get { return dynamicLimiterStatus; }
-			private set
-			{
-				if (dynamicLimiterStatus != value)
-				{
-					dynamicLimiterStatus = value;
-					OnNotifyPropertyChanged();
-				}
-			}
-		}
-	}
+            DynamicLimiterStatus = toProcess.DynamicLimiterStatus;
+            NavigationStatus = toProcess.NavigationStatus;
+            PositionControlStatus = toProcess.PositionControlStatus;
+            IsInFault = toProcess.IsInFault();
+        }
+        else
+        {
+            Alias = string.Empty;
+            IPAddress = null;
+            IsVirtual = false;
+
+            CurrentMovementType = MovementType.Stationary;
+
+            X = float.NaN;
+            Y = float.NaN;
+            Heading = float.NaN;
+
+            DynamicLimiterStatus = DynamicLimiterStatus.Unknown;
+            NavigationStatus = NavigationStatus.Unknown;
+            PositionControlStatus = PositionControlStatus.Unknown;
+            IsInFault = false;
+        }
+
+
+    }
+
+    private DynamicLimiterStatus _dynamicLimiterStatus = DynamicLimiterStatus.Unknown;
+
+    private NavigationStatus _navigationStatus = NavigationStatus.Unknown;
+
+    private PositionControlStatus _positionControlStatus = PositionControlStatus.Unknown;
+
+    public NavigationStatus NavigationStatus
+    {
+        get { return _navigationStatus; }
+        private set
+        {
+            if (_navigationStatus != value)
+            {
+                _navigationStatus = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
+
+    public PositionControlStatus PositionControlStatus
+    {
+        get { return _positionControlStatus; }
+        private set
+        {
+            if (_positionControlStatus != value)
+            {
+                _positionControlStatus = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
+
+    private bool _isVirtual = false;
+
+    public bool IsVirtual
+    {
+        get { return _isVirtual; }
+        private set
+        {
+            if (_isVirtual != value)
+            {
+                _isVirtual = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
+
+    public DynamicLimiterStatus DynamicLimiterStatus
+    {
+        get { return _dynamicLimiterStatus; }
+        private set
+        {
+            if (_dynamicLimiterStatus != value)
+            {
+                _dynamicLimiterStatus = value;
+                OnNotifyPropertyChanged();
+            }
+        }
+    }
 }

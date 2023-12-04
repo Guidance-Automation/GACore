@@ -3,88 +3,104 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace GACore
+namespace GACore;
+
+public struct IPAddressRange
 {
-	public struct IPAddressRange
+	private readonly AddressFamily _addressFamily;
+
+	private readonly byte[] _lowerBytes;
+
+	private readonly byte[] _upperBytes;
+
+	public IPAddressRange(string lowerIPV4string, string upperIPV4string)
+		: this(IPAddress.Parse(lowerIPV4string), IPAddress.Parse(upperIPV4string))
 	{
-		private readonly AddressFamily addressFamily;
+	}
 
-		private readonly byte[] lowerBytes;
+	public override readonly int GetHashCode()
+    {
+        return HashCode.Combine(_addressFamily, _lowerBytes, _upperBytes);
+    }
 
-		private readonly byte[] upperBytes;
+    public static bool operator !=(IPAddressRange rangeA, IPAddressRange rangeB)
+    {
+        return !rangeA.Equals(rangeB);
+    }
 
-		public IPAddressRange(string lowerIPV4string, string upperIPV4string)
-			: this(IPAddress.Parse(lowerIPV4string), IPAddress.Parse(upperIPV4string))
+    public static bool operator ==(IPAddressRange rangeA, IPAddressRange rangeB)
+    {
+        return rangeA.Equals(rangeB);
+    }
+
+    public override readonly bool Equals(object obj)
+	{
+		if (obj is not IPAddressRange) return false;
+
+		IPAddressRange other = (IPAddressRange)obj;
+
+		return _addressFamily == other._addressFamily
+			&& _lowerBytes.SequenceEqual(other._lowerBytes)
+			&& _upperBytes.SequenceEqual(other._upperBytes);
+	}
+
+	public IPAddressRange(IPAddress lower, IPAddress upper)
+	{
+		if (lower == null) throw new ArgumentOutOfRangeException(nameof(lower));
+		if (upper == null) throw new ArgumentOutOfRangeException(nameof(upper));
+
+		if (lower.AddressFamily != upper.AddressFamily) throw new InvalidOperationException("Inconsistent address families");
+
+		_addressFamily = lower.AddressFamily;
+		_lowerBytes = lower.GetAddressBytes();
+		_upperBytes = upper.GetAddressBytes();
+	}
+
+    public readonly IPAddress Lower
+    {
+        get
+        {
+            return new IPAddress(_lowerBytes);
+        }
+    }
+
+    public readonly IPAddress Upper
+    {
+        get
+        {
+            return new IPAddress(_upperBytes);
+        }
+    }
+
+    public readonly string ToSummaryString()
+    {
+        return string.Format("IPAddressRange lower:{0}, upper:{1}", Lower, Upper);
+    }
+
+    public override readonly string ToString()
+    {
+        return ToSummaryString();
+    }
+
+    public readonly bool IsInRange(IPAddress ipaddress)
+    {
+        ArgumentNullException.ThrowIfNull(ipaddress);
+
+        if (ipaddress.AddressFamily != _addressFamily) return false;
+
+		byte[] addressBytes = ipaddress.GetAddressBytes();
+
+		bool lowerBoundary = true;
+		bool upperBoundary = true;
+
+		for (int i = 0; i < _lowerBytes.Length && (lowerBoundary || upperBoundary); i++)
 		{
+			if ((lowerBoundary && addressBytes[i] < _lowerBytes[i]) || (upperBoundary && addressBytes[i] > _upperBytes[i])) return false;
+
+			lowerBoundary &= (addressBytes[i] == _lowerBytes[i]);
+			upperBoundary &= (addressBytes[i] == _upperBytes[i]);
 		}
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hash = 17;
-				hash = hash * 23 + addressFamily.GetHashCode();
-				hash = hash * 23 + lowerBytes.GetHashCode();
-				hash = hash * 23 + upperBytes.GetHashCode();
-				return hash;
-			}
-		}
-
-		public static bool operator !=(IPAddressRange rangeA, IPAddressRange rangeB) => !rangeA.Equals(rangeB);
-
-		public static bool operator ==(IPAddressRange rangeA, IPAddressRange rangeB) => rangeA.Equals(rangeB);
-
-		public override bool Equals(object obj)
-		{
-			if (!(obj is IPAddressRange)) return false;
-
-			IPAddressRange other = (IPAddressRange)obj;
-
-			return addressFamily == other.addressFamily
-				&& lowerBytes.SequenceEqual(other.lowerBytes)
-				&& upperBytes.SequenceEqual(other.upperBytes);
-		}
-
-		public IPAddressRange(IPAddress lower, IPAddress upper)
-		{
-			if (lower == null) throw new ArgumentOutOfRangeException("lower");
-			if (upper == null) throw new ArgumentOutOfRangeException("upper");
-
-			if (lower.AddressFamily != upper.AddressFamily) throw new ArgumentOutOfRangeException("Inconsistent address families");
-
-			this.addressFamily = lower.AddressFamily;
-			this.lowerBytes = lower.GetAddressBytes();
-			this.upperBytes = upper.GetAddressBytes();
-		}
-
-		public IPAddress Lower => new IPAddress(lowerBytes);
-
-		public IPAddress Upper => new IPAddress(upperBytes);
-
-		public string ToSummaryString() => string.Format("IPAddressRange lower:{0}, upper:{1}", Lower, Upper);
-
-		public override string ToString() => ToSummaryString();
-
-		public bool IsInRange(IPAddress ipaddress)
-		{
-			if (ipaddress == null) throw new ArgumentNullException();
-
-			if (ipaddress.AddressFamily != addressFamily) return false;
-
-			byte[] addressBytes = ipaddress.GetAddressBytes();
-
-			bool lowerBoundary = true;
-			bool upperBoundary = true;
-
-			for (int i = 0; i < this.lowerBytes.Length && (lowerBoundary || upperBoundary); i++)
-			{
-				if ((lowerBoundary && addressBytes[i] < lowerBytes[i]) || (upperBoundary && addressBytes[i] > upperBytes[i])) return false;
-
-				lowerBoundary &= (addressBytes[i] == lowerBytes[i]);
-				upperBoundary &= (addressBytes[i] == upperBytes[i]);
-			}
-
-			return true;
-		}
+		return true;
 	}
 }

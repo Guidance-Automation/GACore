@@ -2,30 +2,29 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace GACore.Controls.View
+namespace GACore.Controls.View;
+
+/// <summary>
+/// Interaction logic for KingpinStateView.xaml
+/// </summary>
+public partial class KingpinStateView : UserControl
 {
-	/// <summary>
-	/// Interaction logic for KingpinStateView.xaml
-	/// </summary>
-	public partial class KingpinStateView : UserControl
-	{
-		public KingpinStateView()
-		{
-			InitializeComponent();
+    public KingpinStateView()
+    {
+        InitializeComponent();
 
 #if DEBUG
-			CompositionTarget.Rendering += CompositionTarget_Rendering;
+        CompositionTarget.Rendering += CompositionTarget_Rendering;
 #endif
-		}
+    }
 #if DEBUG
-		private void CompositionTarget_Rendering(object sender, System.EventArgs e)
-		{
+    private void CompositionTarget_Rendering(object sender, System.EventArgs e)
+    {
 #warning assumed parent will do this
 
-			if (DataContext is IRefresh)
-				((IRefresh)DataContext).Refresh();
-		}
+        if (DataContext is IRefresh refresh)
+            refresh.Refresh();
+    }
 #endif
 
-	}
 }

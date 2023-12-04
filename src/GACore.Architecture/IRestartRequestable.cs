@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace GACore.Architecture
-{
-    public interface IRestartRequestable
-    {
-        event Action RestartRequested;
+namespace GACore.Architecture;
 
-        void RequestRestart();
-    }
+public interface IRestartRequestable
+{
+    public event Action RestartRequested;
+
+    public void RequestRestart();
 }

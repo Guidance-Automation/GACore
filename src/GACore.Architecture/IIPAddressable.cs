@@ -1,9 +1,8 @@
 ﻿using System.Net;
 
-namespace GACore.Architecture
+namespace GACore.Architecture;
+
+public interface IIPAddressable
 {
-	public interface IIPAddressable
-	{
-		IPAddress IPAddress { get; set; }
-	}
+	public IPAddress IPAddress { get; set; }
 }

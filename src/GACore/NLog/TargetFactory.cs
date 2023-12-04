@@ -2,43 +2,42 @@
 using System;
 using System.IO;
 
-namespace GACore.NLog
+namespace GACore.NLog;
+
+public static class TargetFactory
 {
-	public static class TargetFactory
+	public static FileTarget GetDefaultFileTarget(string name, string fileName)
 	{
-		public static FileTarget GetDefaultFileTarget(string name, string fileName)
+		if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+
+		if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName));
+
+		FileTarget target = new(name)
 		{
-			if (string.IsNullOrEmpty(name)) throw new ArgumentNullException();
+			FileName = fileName,
+			Layout = LayoutFactory.DefaultLayout
+		};
 
-			if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException();
+		target.SetDefaultArchiveSettings(fileName);
 
-			FileTarget target = new FileTarget(name)
-			{
-				FileName = fileName,
-				Layout = LayoutFactory.DefaultLayout
-			};
+		return target;
+	}
 
-			target.SetDefaultArchiveSettings(fileName);
+	private static void SetDefaultArchiveSettings(this FileTarget fileTarget, string fileName)
+	{
+		string directory = Path.GetDirectoryName(fileName);
+		string archiveDirectory = Path.Combine(directory, "archives");
 
-			return target;
-		}
+		DirectoryInfo info = new(archiveDirectory);
 
-		private static void SetDefaultArchiveSettings(this FileTarget fileTarget, string fileName)
-		{
-			string directory = Path.GetDirectoryName(fileName);
-			string archiveDirectory = Path.Combine(directory, "archives");
+		if (!info.Exists) Directory.CreateDirectory(archiveDirectory);
 
-			DirectoryInfo info = new DirectoryInfo(archiveDirectory);
+		string archiveFilename = string.Format(@"{{##}}_{0}", Path.GetFileName(fileName));
+		string archiveFullPath = Path.Combine(archiveDirectory, archiveFilename);
 
-			if (!info.Exists) Directory.CreateDirectory(archiveDirectory);
-
-			string archiveFilename = string.Format(@"{{##}}_{0}", Path.GetFileName(fileName));
-			string archiveFullPath = Path.Combine(archiveDirectory, archiveFilename);
-
-			fileTarget.ArchiveFileName = archiveFullPath;
-			fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
-			fileTarget.ArchiveAboveSize = 10000000;
-			fileTarget.MaxArchiveFiles = 3;
-		}
+		fileTarget.ArchiveFileName = archiveFullPath;
+		fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
+		fileTarget.ArchiveAboveSize = 10000000;
+		fileTarget.MaxArchiveFiles = 3;
 	}
 }

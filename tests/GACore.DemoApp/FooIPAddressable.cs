@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
+using System.Runtime.Versioning;
 using GACore.Architecture;
 
-namespace GACore.DemoApp
+namespace GACore.DemoApp;
+
+[SupportedOSPlatform("windows")]
+public class FooIPAddressable : IIPAddressable
 {
-	public class FooIPAddressable : IIPAddressable
+	public IPAddress IPAddress { get; set; } = IPAddress.Loopback;
+
+	public void Randomize()
 	{
-		public IPAddress IPAddress { get; set; } = IPAddress.Loopback;
+		byte[] bytes = new byte[4];
+		Tools.Random.NextBytes(bytes);
 
-		public void Randomize()
-		{
-			byte[] bytes = new byte[4];
-			Tools.Random.NextBytes(bytes);
-
-			IPAddress = new IPAddress(bytes);
-		}
+		IPAddress = new IPAddress(bytes);
 	}
 }

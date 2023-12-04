@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
 
-namespace GACore.Controls.View
+namespace GACore.Controls.View;
+
+public partial class KingpinStatusView : UserControl
 {
-	public partial class KingpinStatusView : UserControl
+	public KingpinStatusView()
 	{
-		public KingpinStatusView()
-		{
-			InitializeComponent();
-		}
+		InitializeComponent();
 	}
 }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Versioning;
 
-namespace GACore.DemoApp
+namespace GACore.DemoApp;
+
+[SupportedOSPlatform("windows")]
+public static class BootStrapper
 {
-	public static class BootStrapper
-	{
-		public static void Activate()
-		{
-			ViewModel.ViewModelLocator.FooBoolObjViewModel.Model = new Model.FooBoolObj();
-		}
-	}
+    public static void Activate()
+    {
+        ViewModel.ViewModelLocator.FooBoolObjViewModel.Model = new Model.FooBoolObj();
+    }
 }

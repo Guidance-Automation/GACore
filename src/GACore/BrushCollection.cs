@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace GACore
+namespace GACore;
+
+/// <summary>
+/// Lightweight structure to tightly couple a foreground and background brush, and associated text.
+/// </summary>
+public struct BrushCollection
 {
-	/// <summary>
-	/// Lightweight structure to tightly couple a foreground and background brush, and associated text.
-	/// </summary>
-	public struct BrushCollection
+	public BrushCollection(string text, Brush foreground, Brush background)
 	{
-		public BrushCollection(string text, Brush foreground, Brush background)
-		{
-			if (string.IsNullOrEmpty(text)) throw new ArgumentOutOfRangeException("text");
+		if (string.IsNullOrEmpty(text)) throw new ArgumentOutOfRangeException(nameof(text));
 
-			if (foreground == null) throw new ArgumentNullException("foreground");
+        ArgumentNullException.ThrowIfNull(foreground);
 
-			if (background == null) throw new ArgumentNullException("background");
+        ArgumentNullException.ThrowIfNull(background);
 
-			Text = text;
-			Foreground = foreground;
-			Background = background;
-		}
-
-		public string ToBrushCollectionString() => string.Format("Text:{0} Foreground:{1} Background:{2}", Text, Foreground, Background);
-
-		public override string ToString() => ToBrushCollectionString();
-
-		public Brush Background { get; }
-
-		public Brush Foreground { get; }
-
-		public string Text { get; }
+        Text = text;
+		Foreground = foreground;
+		Background = background;
 	}
+
+    public readonly string ToBrushCollectionString()
+    {
+        return string.Format("Text:{0} Foreground:{1} Background:{2}", Text, Foreground, Background);
+    }
+
+    public override readonly string ToString()
+    {
+        return ToBrushCollectionString();
+    }
+
+    public Brush Background { get; }
+
+	public Brush Foreground { get; }
+
+	public string Text { get; }
 }

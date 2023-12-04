@@ -1,17 +1,16 @@
-﻿namespace GACore.DemoApp.Model
+﻿namespace GACore.DemoApp.Model;
+
+public class FooBoolObj
 {
-	public class FooBoolObj
-	{
-		public bool IsSet { get; set; } = false;
+    public bool IsSet { get; set; } = false;
 
-		public FooBoolObj()
-		{
-		}
+    public FooBoolObj()
+    {
+    }
 
-		public void ToggleIsSet()
-		{
-			bool current = IsSet;
-			IsSet = !current;
-		}
-	}
+    public void ToggleIsSet()
+    {
+        bool current = IsSet;
+        IsSet = !current;
+    }
 }

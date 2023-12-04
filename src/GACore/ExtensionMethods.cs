@@ -5,67 +5,68 @@ using GAAPICommon.Core.Dtos;
 using System;
 using GAAPICommon.Architecture;
 
-namespace GACore
+namespace GACore;
+
+public static class ExtensionMethods
 {
-	public static class ExtensionMethods
-	{
-		private static readonly Dictionary<ReleaseFlag, string> releaseFlagDictionary = new Dictionary<ReleaseFlag, string>()
-		{
-			{ReleaseFlag.Alpha, "Alpha" },
-			{ReleaseFlag.Beta, "Beta" },
-			{ReleaseFlag.ReleaseCandidate, "Release candidate" },
-			{ReleaseFlag.Release, "Release" }
-		};
+    private static readonly Dictionary<ReleaseFlag, string> _releaseFlagDictionary = new()
+    {
+        {ReleaseFlag.Alpha, "Alpha" },
+        {ReleaseFlag.Beta, "Beta" },
+        {ReleaseFlag.ReleaseCandidate, "Release candidate" },
+        {ReleaseFlag.Release, "Release" }
+    };
 
-		public static FleetManagementMetadataDto ToFleetManagementMetadataDto(this FleetManagementMetadata metadata)
+    public static FleetManagementMetadataDto ToFleetManagementMetadataDto(this FleetManagementMetadata metadata)
+    {
+        ArgumentNullException.ThrowIfNull(metadata);
+
+        return new FleetManagementMetadataDto()
         {
-			if (metadata == null)
-				throw new ArgumentNullException(nameof(metadata));
+            ProductName = metadata.ProductName,
+            SemVer = metadata.Version.ToSemVerDto()
+        };
+    }
 
-			return new FleetManagementMetadataDto()
-			{
-				ProductName = metadata.ProductName,
-				SemVer = metadata.Version.ToSemVerDto()
-			};
+    public static SemVerDto ToSemVerDto(this ISemVer semVer)
+    {
+        ArgumentNullException.ThrowIfNull(semVer);
+
+        return new SemVerDto()
+        {
+            Major = semVer.Major,
+            Minor = semVer.Minor,
+            Patch = semVer.Patch,
+            ReleaseFlag = _releaseFlagDictionary[semVer.ReleaseFlag]
+        };
+    }
+
+    public static Color ToColor(this LightState? lightState)
+    {
+        switch (lightState)
+        {
+            case LightState.Green:
+                return Colors.Green;
+
+            case LightState.Amber:
+                return Colors.Orange;
+
+            case LightState.Red:
+                return Colors.Red;
+
+            case LightState.Off:
+            default:
+                return Colors.White;
         }
+    }
 
-		public static SemVerDto ToSemVerDto(this ISemVer semVer)
-		{
-			if (semVer == null) throw new ArgumentNullException("semVer");
+    public static KingpinFaultDiagnosis Diagnose(this IKingpinState kingpinState) => new(kingpinState);
 
-			return new SemVerDto()
-			{
-				Major = semVer.Major,
-				Minor = semVer.Minor,
-				Patch = semVer.Patch,
-				ReleaseFlag = releaseFlagDictionary[semVer.ReleaseFlag]
-			};
-		}
+    public static BrushCollection GetBrushCollection<T>(this Dictionary<T, BrushCollection> dictionary, T key)
+    {
+        if (dictionary.TryGetValue(key, out BrushCollection value))
+            return value;
 
-		public static Color ToColor(this LightState? lightState)
-		{
-			switch (lightState)
-			{
-				case LightState.Green: return Colors.Green;
-
-				case LightState.Amber: return Colors.Orange;
-
-				case LightState.Red: return Colors.Red;
-
-				case LightState.Off:
-				default:
-					return Colors.White;
-			}
-		}
-
-		public static KingpinFaultDiagnosis Diagnose(this IKingpinState kingpinState) => new KingpinFaultDiagnosis(kingpinState);
-
-		public static BrushCollection GetBrushCollection<T>(this Dictionary<T, BrushCollection> dictionary, T key)
-		{
-			if (dictionary.ContainsKey(key))
-				return dictionary[key];
-
-			return new BrushCollection("Unknown", Brushes.Crimson, Brushes.White);
-		}
-	}
+        return new BrushCollection("Unknown", Brushes.Crimson, Brushes.White);
+    }
 }

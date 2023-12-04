@@ -2,40 +2,39 @@
 using NUnit.Framework;
 using System;
 
-namespace GACore.Test
+namespace GACore.Test;
+
+[TestFixture]
+[Description("Result object")]
+public class TResult
 {
-	[TestFixture]
-	[Description("Result object")]
-	public class TResult
-	{
-		[Test]
-		public void Success()
-		{
-			IResult result = Result.FromSuccess();
+    [Test]
+    public void Success()
+    {
+        IResult result = Result.FromSuccess();
 
-			Assert.IsTrue(result.IsSuccessful);
-			StringAssert.AreEqualIgnoringCase(string.Empty, result.FailureReason);
-		}
+        Assert.That(result.IsSuccessful);
+        Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+    }
 
-		[Test]
-		public void Failure_Unspecified()
-		{
-			IResult result = Result.FromFailure();
+    [Test]
+    public void Failure_Unspecified()
+    {
+        IResult result = Result.FromFailure();
 
-			Assert.IsFalse(result.IsSuccessful);
-			StringAssert.AreEqualIgnoringCase("Unknown", result.FailureReason);
-		}
-		
-		[Test]
-		public void FromException()
-		{
-			string message = "OHES NOES";
-			Exception ex = new Exception(message);
+        Assert.That(!result.IsSuccessful);
+        Assert.That(string.Equals("Unknown", result.FailureReason, StringComparison.OrdinalIgnoreCase));
+    }
 
-			IResult result = Result.FromException(ex);
+    [Test]
+    public void FromException()
+    {
+        string message = "OHES NOES";
+        Exception ex = new(message);
 
-			Assert.IsFalse(result.IsSuccessful);
-			StringAssert.AreEqualIgnoringCase(message, result.FailureReason);
-		}
-	}
+        IResult result = Result.FromException(ex);
+
+        Assert.That(!result.IsSuccessful);
+        Assert.That(string.Equals(message, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+    }
 }

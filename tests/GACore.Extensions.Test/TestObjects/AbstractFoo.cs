@@ -1,31 +1,31 @@
 ﻿using System;
 
-namespace GACore.Extensions.Test.TestObjects
+namespace GACore.Extensions.Test.TestObjects;
+
+public abstract class AbstractFoo
 {
-	public abstract class AbstractFoo
-	{
-		private readonly Guid guid;
+    public AbstractFoo()
+    {
+        Guid = Guid.NewGuid();
+    }
 
-		public AbstractFoo()
-		{
-			this.guid = Guid.NewGuid();
-		}
+    public Guid Guid { get; }
 
-		public Guid Guid => guid;
+    public override int GetHashCode()
+    {
+        return Guid.GetHashCode();
+    }
 
-		public override int GetHashCode() => guid.GetHashCode();
+    public abstract string ClassType { get; }
 
-		public abstract string ClassType { get; }
+    public override bool Equals(object obj)
+    {
+        if (obj == null) return false;
 
-		public override bool Equals(object obj)
-		{
-			if (obj == null) return false;
+        AbstractFoo other = (AbstractFoo)obj;
 
-			AbstractFoo other = (AbstractFoo)obj;
+        if (other != null) return (Guid == other.Guid);
 
-			if (other != null) return (guid == other.guid);
-
-			return false;
-		}
-	}
+        return false;
+    }
 }
