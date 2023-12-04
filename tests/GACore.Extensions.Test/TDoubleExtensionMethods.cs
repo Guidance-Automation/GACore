@@ -35,7 +35,7 @@ public class TDouble_ExtensionMethods
         double wrapped = value.PiWrap();
 
         Assert.That(wrapped, Is.EqualTo(0).Within(Math.PI));
-        Assert.That(0, Is.EqualTo(wrapped));
+        Assert.That(wrapped, Is.EqualTo(0));
     }
 
     [Test]
@@ -45,7 +45,7 @@ public class TDouble_ExtensionMethods
         double wrapped = value.PiWrap();
 
         Assert.That(wrapped, Is.EqualTo(0).Within(Math.PI));
-        Assert.That(0, Is.EqualTo(wrapped));
+        Assert.That(wrapped, Is.EqualTo(0));
     }
 
     [TestCase(1e300)]

@@ -46,7 +46,7 @@ public class Messenger
 	/// <typeparam name="T"></typeparam>
 	/// <param name="recipient"></param>
 	/// <param name="action"></param>
-	public void Register<T>(object recipient, Action<T> action)
+	public static void Register<T>(object recipient, Action<T> action)
 	{
 		Register(recipient, action, null);
 	}
@@ -59,7 +59,7 @@ public class Messenger
 	/// <param name="recipient"></param>
 	/// <param name="action"></param>
 	/// <param name="context"></param>
-	public void Register<T>(object recipient, Action<T> action, object? context)
+	public static void Register<T>(object recipient, Action<T> action, object? context)
 	{
         MessengerKey key = new(recipient, context);
 		_dictionary.TryAdd(key, action);
@@ -70,7 +70,7 @@ public class Messenger
 	/// no longer receive any messages.
 	/// </summary>
 	/// <param name="recipient"></param>
-	public void Unregister(object recipient)
+	public static void Unregister(object recipient)
 	{
 		Unregister(recipient, null);
 	}
@@ -81,7 +81,7 @@ public class Messenger
 	/// </summary>
 	/// <param name="recipient"></param>
 	/// <param name="context"></param>
-	public void Unregister(object recipient, object? context)
+	public static void Unregister(object recipient, object? context)
     {
         MessengerKey key = new(recipient, context);
 		_dictionary.TryRemove(key, out _);
@@ -93,7 +93,7 @@ public class Messenger
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="message"></param>
-	public void Send<T>(T message)
+	public static void Send<T>(T message)
 	{
 		Send(message, null);
 	}
@@ -105,7 +105,7 @@ public class Messenger
 	/// <typeparam name="T"></typeparam>
 	/// <param name="message"></param>
 	/// <param name="context"></param>
-	public void Send<T>(T message, object? context)
+	public static void Send<T>(T message, object? context)
 	{
 		IEnumerable<KeyValuePair<MessengerKey, object>> result;
 

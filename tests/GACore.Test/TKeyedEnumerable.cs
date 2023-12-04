@@ -11,15 +11,18 @@ public class TKeyedEnumerable
     {
         IKeyedEnumerable<int> empty = KeyedEnumerable<int>.Empty();
 
-        Assert.That(Guid.Empty, Is.EqualTo(empty.Key));
-        Assert.That(empty.Items, Is.Empty);
+        Assert.Multiple(() =>
+        {
+            Assert.That(Guid.Empty, Is.EqualTo(empty.Key));
+            Assert.That(empty.Items, Is.Empty);
+        });
     }
 
     [Test]
     public void ArgumentOutOfRange()
     {
         List<int> values = [0, 1, 2, 3];
-        Assert.Throws<ArgumentOutOfRangeException>(() =>
+        Assert.Throws<InvalidOperationException>(() =>
         {
             new KeyedEnumerable<int>(Guid.Empty, values);
         });
@@ -32,7 +35,10 @@ public class TKeyedEnumerable
 
         IKeyedEnumerable<int> keyed = new KeyedEnumerable<int>(Guid.NewGuid(), values);
 
-        Assert.That(Guid.Empty, Is.Not.EqualTo(keyed.Key));
-        Assert.That(values, Is.EqualTo(keyed.Items));
+        Assert.Multiple(() =>
+        {
+            Assert.That(Guid.Empty, Is.Not.EqualTo(keyed.Key));
+            Assert.That(values, Is.EqualTo(keyed.Items));
+        });
     }
 }

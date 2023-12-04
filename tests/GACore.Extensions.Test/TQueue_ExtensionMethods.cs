@@ -15,21 +15,22 @@ public class TQueue_ExtensionMethods
     {
         Queue<int> queue = new();
         queue.EnqueueAll(_additions);
-        Assert.That(6, Is.EqualTo(queue.Count));
+        Assert.That(queue, Has.Count.EqualTo(6));
         Assert.That(queue, Does.Contain(4));
 
-        Assert.Throws(typeof(ArgumentOutOfRangeException), delegate { queue.DequeueMatching(i => i == 7); });
+        Assert.Throws(typeof(InvalidOperationException), delegate { queue.DequeueMatching(i => i == 7); });
         int dequeued = queue.DequeueMatching(i => i == 4);
 
-        Assert.That(dequeued, Is.EqualTo(4));
-        Assert.That(queue.Count, Is.EqualTo(5));
-
-        Assert.That(queue, Does.Not.Contain(4));
-
-        Assert.That(queue, Does.Contain(1));
-        Assert.That(queue, Does.Contain(2));
-        Assert.That(queue, Does.Contain(3));
-        Assert.That(queue, Does.Contain(5));
-        Assert.That(queue, Does.Contain(6));
+        Assert.Multiple(() =>
+        {
+            Assert.That(dequeued, Is.EqualTo(4));
+            Assert.That(queue, Has.Count.EqualTo(5));
+            Assert.That(queue, Does.Not.Contain(4));
+            Assert.That(queue, Does.Contain(1));
+            Assert.That(queue, Does.Contain(2));
+            Assert.That(queue, Does.Contain(3));
+            Assert.That(queue, Does.Contain(5));
+            Assert.That(queue, Does.Contain(6));
+        });
     }
 }

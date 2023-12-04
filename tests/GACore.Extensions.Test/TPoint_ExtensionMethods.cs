@@ -15,8 +15,11 @@ public class TPoint_ExtensionMethods
         Point point = new(double.NaN, 2.5);
         Point quantized = point.Quantize(2);
 
-        Assert.That(double.NaN, Is.EqualTo(quantized.X));
-        Assert.That(2, Is.EqualTo(quantized.Y));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quantized.X, Is.EqualTo(double.NaN));
+            Assert.That(quantized.Y, Is.EqualTo(2));
+        });
     }
 
     [Test]
@@ -26,8 +29,11 @@ public class TPoint_ExtensionMethods
 
         Point quantized = point.Quantize(0.001);
 
-        Assert.That(3.142, Is.EqualTo(quantized.X));
-        Assert.That(3.142, Is.EqualTo(quantized.Y));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quantized.X, Is.EqualTo(3.142));
+            Assert.That(quantized.Y, Is.EqualTo(3.142));
+        });
     }
 
     [Test]
@@ -36,8 +42,11 @@ public class TPoint_ExtensionMethods
         Point point = new(1.6, 2.7);
         Point quantized = point.Quantize(2);
 
-        Assert.That(2, Is.EqualTo(quantized.X));
-        Assert.That(2, Is.EqualTo(quantized.Y));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quantized.X, Is.EqualTo(2));
+            Assert.That(quantized.Y, Is.EqualTo(2));
+        });
     }
 
     [Test]

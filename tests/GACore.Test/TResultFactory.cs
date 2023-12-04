@@ -23,8 +23,11 @@ public class TResultFactory
     {
         IResult result = ResultFactory.FromUnknownFailure();
 
-        Assert.That(!result.IsSuccessful);
-        Assert.That(string.Equals("unknown", result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!result.IsSuccessful);
+            Assert.That(string.Equals("unknown", result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [Test]
@@ -32,9 +35,12 @@ public class TResultFactory
     {
         IResult<int> result = ResultFactory.FromUnknownFailure<int>();
 
-        Assert.That(!result.IsSuccessful);
-        Assert.That(default(int), Is.EqualTo(result.Value));
-        Assert.That(string.Equals("unknown", result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!result.IsSuccessful);
+            Assert.That(result.Value, Is.EqualTo(default(int)));
+            Assert.That(string.Equals("unknown", result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [Test]
@@ -43,8 +49,11 @@ public class TResultFactory
     {
         IResult result = ResultFactory.FromFailure(failureReason);
 
-        Assert.That(!result.IsSuccessful);
-        Assert.That(string.Equals(failureReason, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!result.IsSuccessful);
+            Assert.That(string.Equals(failureReason, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [Test]
@@ -53,9 +62,12 @@ public class TResultFactory
     {
         IResult<int> result = ResultFactory.FromFailure<int>(failureReason);
 
-        Assert.That(!result.IsSuccessful);
-        Assert.That(default(int), Is.EqualTo(result.Value));
-        Assert.That(string.Equals(failureReason, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!result.IsSuccessful);
+            Assert.That(result.Value, Is.EqualTo(default(int)));
+            Assert.That(string.Equals(failureReason, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [Test]
@@ -63,8 +75,11 @@ public class TResultFactory
     {
         IResult result = ResultFactory.FromSuccess();
 
-        Assert.That(result.IsSuccessful);
-        Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccessful);
+            Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [Test]
@@ -72,8 +87,11 @@ public class TResultFactory
     {
         IResult<int> result = ResultFactory.FromSuccess(69);
 
-        Assert.That(result.IsSuccessful);
-        Assert.That(result.Value, Is.EqualTo(69));
-        Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccessful);
+            Assert.That(result.Value, Is.EqualTo(69));
+            Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 }
