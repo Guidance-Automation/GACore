@@ -5,18 +5,12 @@
 		<OutputType>Library</OutputType>
 		<PlatformName>windows</PlatformName>
 		<UseWPF>true</UseWPF>
-		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-		<AssemblyTitle>GACore.Extensions</AssemblyTitle>
-		<Product>GACore.Extensions</Product>
-		<Copyright>Copyright ©  2019</Copyright>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.21.0.0</FileVersion>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\GACore\GACore.csproj" />
+		<ProjectReference Include="..\GACore\GACore.csproj"  PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>
