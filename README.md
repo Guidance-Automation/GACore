@@ -1,8 +1,12 @@
-# GA Core
-## Change Log
-
-v2.6.0 (4th Dec 23)
-* Target .NET 8
+ ____    ___  _____                
+|  __ \ / _ \/  __ \               
+| |  \// /_\ \ /  \/ ___  _ __ ___ 
+| | __ |  _  | |    / _ \| '__/ _ \
+| |_\ \| | | | \__/\ (_) | | |  __/
+ \____/\_| |_/\____/\___/|_|  \___|
+                                  
+https://github.com/GuidanceAutomation/GACore
+https://www.guidanceautomation.com/
 
 v2.5.2 (16th Mar 21)
 
@@ -306,6 +310,3 @@ v1.0.0 (6th Aug 19)
 - Initial release
 * Kingpin state enumerators
 * Kingpin status control
-
-https://github.com/GuidanceAutomation/GACore
-https://www.guidanceautomation.com/
