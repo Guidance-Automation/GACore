@@ -3,6 +3,9 @@ using System.Runtime.Intrinsics;
 
 namespace GACore;
 
+/// <summary>
+/// Describes the width, height, and location of a rectangle.
+/// </summary>
 public struct Rectangle
 {
     internal double _x;
@@ -15,37 +18,24 @@ public struct Rectangle
 
     private static readonly Rectangle _empty = CreateEmptyRect();
 
-    //
-    // Summary:
-    //     Gets a special value that represents a rectangle with no position or area.
-    //
-    // Returns:
-    //     The empty rectangle, which has System.Windows.Rect.X and System.Windows.Rect.Y
-    //     property values of System.Double.PositiveInfinity, and has System.Windows.Rect.Width
-    //     and System.Windows.Rect.Height property values of System.Double.NegativeInfinity.
+    /// <summary>
+    /// Gets a special value that represents a rectangle with no position or area.
+    /// </summary>
+    /// <returns>The empty rectangle, which has X and Y property values of System.Double.PositiveInfinity,
+    /// and has Width and Height property values of System.Double.NegativeInfinity.</returns>
     public static Rectangle Empty => _empty;
 
-    //
-    // Summary:
-    //     Gets a value that indicates whether the rectangle is the System.Windows.Rect.Empty
-    //     rectangle.
-    //
-    // Returns:
-    //     true if the rectangle is the System.Windows.Rect.Empty rectangle; otherwise,
-    //     false.
+    /// <summary>
+    /// Gets a value that indicates whether the rectangle is the Empty rectangle.
+    /// </summary>
+    /// <returns>True if the rectangle is the Empty rectangle; otherwise false</returns>
     public readonly bool IsEmpty => _width < 0.0;
 
-    //
-    // Summary:
-    //     Gets or sets the position of the top-left corner of the rectangle.
-    //
-    // Returns:
-    //     The position of the top-left corner of the rectangle. The default is (0, 0).
-    //
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.Location is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the position of the top-left corner of the rectangle.
+    /// </summary>
+    /// <returns>The position of the top-left corner of the rectangle. The default is (0, 0).</returns>
+    /// <exception cref="InvalidOperationException">Location is set on an Empty rectangle. </exception>
     public Vector128<double> Location
     {
         readonly get
@@ -64,17 +54,11 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets or sets the width and height of the rectangle.
-    //
-    // Returns:
-    //     A System.Windows.Size structure that specifies the width and height of the rectangle.
-    //
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.Size is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the width and height of the rectangle.
+    /// </summary>
+    /// <returns>A Vector128 structure that specifies the width and height of the rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Size is set on an Empty rectangle. </exception>
     public Vector128<double> Size
     {
         readonly get
@@ -104,16 +88,11 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets or sets the x-axis value of the left side of the rectangle.
-    //
-    // Returns:
-    //     The x-axis value of the left side of the rectangle.
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.X is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the x-axis value of the left side of the rectangle.
+    /// </summary>
+    /// <returns>The x-axis value of the left side of the rectangle.</returns>
+    /// <exception cref="InvalidOperationException">X is set on an Empty rectangle. </exception>
     public double X
     {
         readonly get
@@ -131,16 +110,11 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets or sets the y-axis value of the top side of the rectangle.
-    //
-    // Returns:
-    //     The y-axis value of the top side of the rectangle.
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.Y is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the y-axis value of the top of the rectangle.
+    /// </summary>
+    /// <returns>The y-axis value of the top of the rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Y is set on an Empty rectangle. </exception>
     public double Y
     {
         readonly get
@@ -158,20 +132,12 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets or sets the width of the rectangle.
-    //
-    // Returns:
-    //     A positive number that represents the width of the rectangle. The default is
-    //     0.
-    //
-    // Exceptions:
-    //   T:System.ArgumentException:
-    //     System.Windows.Rect.Width is set to a negative value.
-    //
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.Width is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the width of the rectangle.
+    /// </summary>
+    /// <returns>A positive number that represents the width of the rectangle. The default is 0.</returns>
+    /// <exception cref="ArgumentException">Width is set to a negative value.</exception>
+    /// <exception cref="InvalidOperationException">Width is set on an Empty rectangle.</exception>
     public double Width
     {
         readonly get
@@ -194,20 +160,12 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets or sets the height of the rectangle.
-    //
-    // Returns:
-    //     A positive number that represents the height of the rectangle. The default is
-    //     0.
-    //
-    // Exceptions:
-    //   T:System.ArgumentException:
-    //     System.Windows.Rect.Height is set to a negative value.
-    //
-    //   T:System.InvalidOperationException:
-    //     System.Windows.Rect.Height is set on an System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Gets or sets the height of the rectangle.
+    /// </summary>
+    /// <returns>A positive number that represents the height of the rectangle. The default is 0.</returns>
+    /// <exception cref="ArgumentException">Height is set to a negative value.</exception>
+    /// <exception cref="InvalidOperationException">Height is set on an Empty rectangle.</exception>
     public double Height
     {
         readonly get
@@ -230,28 +188,22 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets the x-axis value of the left side of the rectangle.
-    //
-    // Returns:
-    //     The x-axis value of the left side of the rectangle.
+    /// <summary>
+    /// Gets the x-axis value of the left side of the rectangle.
+    /// </summary>
+    /// <returns>The x-axis value of the left side of the rectangle.</returns>
     public readonly double Left => _x;
 
-    //
-    // Summary:
-    //     Gets the y-axis position of the top of the rectangle.
-    //
-    // Returns:
-    //     The y-axis position of the top of the rectangle.
+    /// <summary>
+    /// Gets the y-axis value of the top of the rectangle.
+    /// </summary>
+    /// <returns>The y-axis value of the top of the rectangle.</returns>
     public readonly double Top => _y;
 
-    //
-    // Summary:
-    //     Gets the x-axis value of the right side of the rectangle.
-    //
-    // Returns:
-    //     The x-axis value of the right side of the rectangle.
+    /// <summary>
+    /// Gets the x-axis value of the right side of the rectangle.
+    /// </summary>
+    /// <returns>The x-axis value of the right side of the rectangle.</returns>
     public readonly double Right
     {
         get
@@ -265,13 +217,10 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets the y-axis value of the bottom of the rectangle.
-    //
-    // Returns:
-    //     The y-axis value of the bottom of the rectangle. If the rectangle is empty, the
-    //     value is System.Double.NegativeInfinity .
+    /// <summary>
+    /// Gets the y-axis value of the bottom of the rectangle.
+    /// </summary>
+    /// <returns>The y-axis value of the bottom of the rectangle. If the rectangle is empty, the value is System.Double.NegativeInfinity .</returns>
     public readonly double Bottom
     {
         get
@@ -285,52 +234,32 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Gets the position of the top-left corner of the rectangle.
-    //
-    // Returns:
-    //     The position of the top-left corner of the rectangle.
+    /// <summary>
+    /// Gets the position of the top-left corner of the rectangle.
+    /// </summary>
     public readonly Vector128<double> TopLeft => Vector128.Create(Left, Top);
 
-    //
-    // Summary:
-    //     Gets the position of the top-right corner of the rectangle.
-    //
-    // Returns:
-    //     The position of the top-right corner of the rectangle.
+    /// <summary>
+    /// Gets the position of the top-right corner of the rectangle.
+    /// </summary>
     public readonly Vector128<double> TopRight => Vector128.Create(Right, Top);
 
-    //
-    // Summary:
-    //     Gets the position of the bottom-left corner of the rectangle
-    //
-    // Returns:
-    //     The position of the bottom-left corner of the rectangle.
+    /// <summary>
+    /// Gets the position of the bottom-left corner of the rectangle
+    /// </summary>
     public readonly Vector128<double> BottomLeft => Vector128.Create(Left, Bottom);
 
-    //
-    // Summary:
-    //     Gets the position of the bottom-right corner of the rectangle.
-    //
-    // Returns:
-    //     The position of the bottom-right corner of the rectangle.
+    /// <summary>
+    /// Gets the position of the bottom-right corner of the rectangle.
+    /// </summary>
     public readonly Vector128<double> BottomRight => Vector128.Create(Right, Bottom);
 
-    //
-    // Summary:
-    //     Compares two rectangles for exact equality.
-    //
-    // Parameters:
-    //   rect1:
-    //     The first rectangle to compare.
-    //
-    //   rect2:
-    //     The second rectangle to compare.
-    //
-    // Returns:
-    //     true if the rectangles have the same System.Windows.Rect.Location and System.Windows.Rect.Size
-    //     values; otherwise, false.
+    /// <summary>
+    /// Compares two rectangles for exact equality.
+    /// </summary>
+    /// <param name="rect1">The first rectangle to compare.</param>
+    /// <param name="rect2">The second rectangle to compare.</param>
+    /// <returns>True if the rectangles have the same Location and Size values; otherwise, false.</returns>
     public static bool operator ==(Rectangle rect1, Rectangle rect2)
     {
         if (rect1.X == rect2.X && rect1.Y == rect2.Y && rect1.Width == rect2.Width)
@@ -341,39 +270,23 @@ public struct Rectangle
         return false;
     }
 
-    //
-    // Summary:
-    //     Compares two rectangles for inequality.
-    //
-    // Parameters:
-    //   rect1:
-    //     The first rectangle to compare.
-    //
-    //   rect2:
-    //     The second rectangle to compare.
-    //
-    // Returns:
-    //     true if the rectangles do not have the same System.Windows.Rect.Location and
-    //     System.Windows.Rect.Size values; otherwise, false.
+    /// <summary>
+    /// Compares two rectangles for inequality.
+    /// </summary>
+    /// <param name="rect1">The first rectangle to compare.</param>
+    /// <param name="rect2">The second rectangle to compare.</param>
+    /// <returns>True if the rectangles do not have the same Location and Size values; otherwise, false.</returns>
     public static bool operator !=(Rectangle rect1, Rectangle rect2)
     {
         return !(rect1 == rect2);
     }
 
-    //
-    // Summary:
-    //     Indicates whether the specified rectangles are equal.
-    //
-    // Parameters:
-    //   rect1:
-    //     The first rectangle to compare.
-    //
-    //   rect2:
-    //     The second rectangle to compare.
-    //
-    // Returns:
-    //     true if the rectangles have the same System.Windows.Rect.Location and System.Windows.Rect.Size
-    //     values; otherwise, false.
+    /// <summary>
+    /// Indicates whether the specified rectangles are equal.
+    /// </summary>
+    /// <param name="rect1">The first rectangle to compare.</param>
+    /// <param name="rect2">The second rectangle to compare.</param>
+    /// <returns>True if the rectangles have the same Location and Size values; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool Equals(Rectangle rect1, Rectangle rect2)
     {
@@ -390,17 +303,11 @@ public struct Rectangle
         return false;
     }
 
-    //
-    // Summary:
-    //     Indicates whether the specified object is equal to the current rectangle.
-    //
-    // Parameters:
-    //   o:
-    //     The object to compare to the current rectangle.
-    //
-    // Returns:
-    //     true if o is a System.Windows.Rect and has the same System.Windows.Rect.Location
-    //     and System.Windows.Rect.Size values as the current rectangle; otherwise, false.
+    /// <summary>
+    /// Indicates whether the specified object is equal to the current rectangle.
+    /// </summary>
+    /// <param name="o">The object to compare to the current rectangle.</param>
+    /// <returns>True if o is a Rectangle and has the same Location and Size values as the current rectangle; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override readonly bool Equals(object? o)
     {
@@ -412,26 +319,17 @@ public struct Rectangle
         return Equals(this, rect);
     }
 
-    //
-    // Summary:
-    //     Indicates whether the specified rectangle is equal to the current rectangle.
-    //
-    //
-    // Parameters:
-    //   value:
-    //     The rectangle to compare to the current rectangle.
-    //
-    // Returns:
-    //     true if the specified rectangle has the same System.Windows.Rect.Location and
-    //     System.Windows.Rect.Size values as the current rectangle; otherwise, false.
+    /// <summary>
+    /// Indicates whether the specified rectangle is equal to the current rectangle.
+    /// </summary>
+    /// <param name="value">The rectangle to compare to the current rectangle.</param>
+    /// <returns>True if the specified rectangle has the same Location and Size values as the current rectangle; otherwise, false.</returns>
     public readonly bool Equals(Rectangle value) => Equals(this, value);
 
-    //
-    // Summary:
-    //     Creates a hash code for the rectangle.
-    //
-    // Returns:
-    //     A hash code for the current System.Windows.Rect structure.
+    /// <summary>
+    /// Creates a hash code for the rectangle.
+    /// </summary>
+    /// <returns>A hash code for the current System.Windows.Rect structure.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public override readonly int GetHashCode()
     {
@@ -443,27 +341,14 @@ public struct Rectangle
         return X.GetHashCode() ^ Y.GetHashCode() ^ Width.GetHashCode() ^ Height.GetHashCode();
     }
 
-    //
-    // Summary:
-    //     Initializes a new instance of the System.Windows.Rect structure that has the
-    //     specified x-coordinate, y-coordinate, width, and height.
-    //
-    // Parameters:
-    //   x:
-    //     The x-coordinate of the top-left corner of the rectangle.
-    //
-    //   y:
-    //     The y-coordinate of the top-left corner of the rectangle.
-    //
-    //   width:
-    //     The width of the rectangle.
-    //
-    //   height:
-    //     The height of the rectangle.
-    //
-    // Exceptions:
-    //   T:System.ArgumentException:
-    //     width is a negative value.-or- height is a negative value.
+    /// <summary>
+    /// Initializes a new instance of the Rectangle structure that has the specified x-coordinate, y-coordinate, width, and height.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the top-left corner of the rectangle.</param>
+    /// <param name="y">The y-coordinate of the top-left corner of the rectangle.</param>
+    /// <param name="width">The width of the rectangle.</param>
+    /// <param name="height">The height of the rectangle.</param>
+    /// <exception cref="ArgumentException">Width is a negative value.-or- height is a negative value.</exception>
     public Rectangle(double x, double y, double width, double height)
     {
         if (width < 0.0 || height < 0.0)
@@ -477,33 +362,47 @@ public struct Rectangle
         _height = height;
     }
 
-    //
-    // Summary:
-    //     Initializes a new instance of the System.Windows.Rect structure that is exactly
-    //     large enough to contain the two specified points.
-    //
-    // Parameters:
-    //   point1:
-    //     The first point that the new rectangle must contain.
-    //
-    //   point2:
-    //     The second point that the new rectangle must contain.
-    public Rectangle(Vector128<double> point1, Vector128<double> point2)
+    /// <summary>
+    /// When CreateMode is TwoPoints, initializes a new instance of the Rectangle structure that is exactly large enough to contain the two specified points.
+    /// When CreateMode is PointAndSize initializes a new instance of the Rectangle structure that has the specified top-left corner location and the specified width and height.
+    /// </summary>
+    /// <param name="point1">TwoPoints : The first point that the new rectangle must contain PointAndSize : A point that specifies the location of the top-left corner of the rectangle.</param>
+    /// <param name="point2">TwoPoints : The second point that the new rectangle must contain. PointAndSize : A Vector128 structure that specifies the width and height of the rectangle.</param>
+    /// <param name="createMode">Switch between creating a Rectangle based on two points, or a rectangle based on the left pointand a size.</param>
+    public Rectangle(Vector128<double> point1, Vector128<double> point2, CreateMode createMode)
     {
-        _x = Math.Min(point1[0], point2[0]);
-        _y = Math.Min(point1[1], point2[1]);
-        _width = Math.Max(Math.Max(point1[0], point2[0]) - _x, 0.0);
-        _height = Math.Max(Math.Max(point1[1], point2[1]) - _y, 0.0);
+        switch(createMode)
+        {
+            case CreateMode.PointAndSize:
+                {
+                    if (point2 == Vector128.Create(double.PositiveInfinity, double.PositiveInfinity))
+                    {
+                        this = Empty;
+                        return;
+                    }
+
+                    _x = point1[0];
+                    _y = point1[1];
+                    _width = point2[0];
+                    _height = point2[1];
+                    break;
+                }
+            case CreateMode.TwoPoints:
+                {
+                    _x = Math.Min(point1[0], point2[0]);
+                    _y = Math.Min(point1[1], point2[1]);
+                    _width = Math.Max(Math.Max(point1[0], point2[0]) - _x, 0.0);
+                    _height = Math.Max(Math.Max(point1[1], point2[1]) - _y, 0.0);
+                    break;
+                }
+        }
     }
 
-    //
-    // Summary:
-    //     Initializes a new instance of the System.Windows.Rect structure that is of the
-    //     specified size and is located at (0,0).
-    //
-    // Parameters:
-    //   size:
-    //     A System.Windows.Size structure that specifies the width and height of the rectangle.
+    /// <summary>
+    /// Initializes a new instance of the Rectangle structure that is of the 
+    /// specified size and is located at (0,0).
+    /// </summary>
+    /// <param name="size">A Vector128 structure that specifies the width and height of the rectangle.</param>
     public Rectangle(Vector128<double> size)
     {
         if (size[0] == double.NegativeInfinity && size[1] == double.NegativeInfinity)
@@ -517,32 +416,19 @@ public struct Rectangle
         _height = size[1];
     }
 
-    //
-    // Summary:
-    //     Indicates whether the rectangle contains the specified point.
-    //
-    // Parameters:
-    //   point:
-    //     The point to check.
-    //
-    // Returns:
-    //     true if the rectangle contains the specified point; otherwise, false.
+    /// <summary>
+    /// Indicates whether the rectangle contains the specified point.
+    /// </summary>
+    /// <param name="point">The point to check.</param>
+    /// <returns>True if the rectangle contains the specified point; otherwise, false.</returns>
     public readonly bool Contains(Vector128<double> point) => Contains(point[0], point[1]);
 
-    //
-    // Summary:
-    //     Indicates whether the rectangle contains the specified x-coordinate and y-coordinate.
-    //
-    //
-    // Parameters:
-    //   x:
-    //     The x-coordinate of the point to check.
-    //
-    //   y:
-    //     The y-coordinate of the point to check.
-    //
-    // Returns:
-    //     true if (x, y) is contained by the rectangle; otherwise, false.
+    /// <summary>
+    /// Indicates whether the rectangle contains the specified x-coordinate and y-coordinate.
+    /// </summary>
+    /// <param name="x">The x-coordinate of the point to check.</param>
+    /// <param name="y">The y-coordinate of the point to check.</param>
+    /// <returns>True if (x, y) is contained by the rectangle; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Contains(double x, double y)
     {
@@ -554,16 +440,11 @@ public struct Rectangle
         return ContainsInternal(x, y);
     }
 
-    //
-    // Summary:
-    //     Indicates whether the rectangle contains the specified rectangle.
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to check.
-    //
-    // Returns:
-    //     true if rect is entirely contained by the rectangle; otherwise, false.
+    /// <summary>
+    /// Indicates whether the rectangle contains the specified rectangle.
+    /// </summary>
+    /// <param name="rect">The rectangle to check.</param>
+    /// <returns>True if rect is entirely contained by the rectangle; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool Contains(Rectangle rect)
     {
@@ -580,18 +461,11 @@ public struct Rectangle
         return false;
     }
 
-    //
-    // Summary:
-    //     Indicates whether the specified rectangle intersects with the current rectangle.
-    //
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to check.
-    //
-    // Returns:
-    //     true if the specified rectangle intersects with the current rectangle; otherwise,
-    //     false.
+    /// <summary>
+    /// Indicates whether the specified rectangle intersects with the current rectangle.
+    /// </summary>
+    /// <param name="rect">The rectangle to check.</param>
+    /// <returns>True if the specified rectangle intersects with the current rectangle; otherwise, false.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly bool IntersectsWith(Rectangle rect)
     {
@@ -608,14 +482,10 @@ public struct Rectangle
         return false;
     }
 
-    //
-    // Summary:
-    //     Finds the intersection of the current rectangle and the specified rectangle,
-    //     and stores the result as the current rectangle.
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to intersect with the current rectangle.
+    /// <summary>
+    /// Finds the intersection of the current rectangle and the specified rectangle, and stores the result as the current rectangle.
+    /// </summary>
+    /// <param name="rect">The rectangle to intersect with the current rectangle.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Intersect(Rectangle rect)
     {
@@ -633,20 +503,12 @@ public struct Rectangle
         _y = num2;
     }
 
-    //
-    // Summary:
-    //     Returns the intersection of the specified rectangles.
-    //
-    // Parameters:
-    //   rect1:
-    //     The first rectangle to compare.
-    //
-    //   rect2:
-    //     The second rectangle to compare.
-    //
-    // Returns:
-    //     The intersection of the two rectangles, or System.Windows.Rect.Empty if no intersection
-    //     exists.
+    /// <summary>
+    /// Returns the intersection of the specified rectangles.
+    /// </summary>
+    /// <param name="rect1">The first rectangle to compare.</param>
+    /// <param name="rect2">The second rectangle to compare.</param>
+    /// <returns>The intersection of the two rectangles, or System.Windows.Rect.Empty if no intersection exists.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle Intersect(Rectangle rect1, Rectangle rect2)
     {
@@ -654,14 +516,10 @@ public struct Rectangle
         return rect1;
     }
 
-    //
-    // Summary:
-    //     Expands the current rectangle exactly enough to contain the specified rectangle.
-    //
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to include.
+    /// <summary>
+    /// Expands the current rectangle exactly enough to contain the specified rectangle.
+    /// </summary>
+    /// <param name="rect">The rectangle to include.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Union(Rectangle rect)
     {
@@ -698,20 +556,12 @@ public struct Rectangle
         }
     }
 
-    //
-    // Summary:
-    //     Creates a rectangle that is exactly large enough to contain the two specified
-    //     rectangles.
-    //
-    // Parameters:
-    //   rect1:
-    //     The first rectangle to include.
-    //
-    //   rect2:
-    //     The second rectangle to include.
-    //
-    // Returns:
-    //     The resulting rectangle.
+    /// <summary>
+    /// Creates a rectangle that is exactly large enough to contain the two specified rectangles.
+    /// </summary>
+    /// <param name="rect1">The first rectangle to include.</param>
+    /// <param name="rect2">The second rectangle to include.</param>
+    /// <returns>The resulting rectangle.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle Union(Rectangle rect1, Rectangle rect2)
     {
@@ -719,54 +569,35 @@ public struct Rectangle
         return rect1;
     }
 
-    //
-    // Summary:
-    //     Expands the current rectangle exactly enough to contain the specified point.
-    //
-    //
-    // Parameters:
-    //   point:
-    //     The point to include.
+    /// <summary>
+    /// Expands the current rectangle exactly enough to contain the specified point.
+    /// </summary>
+    /// <param name="point">The point to include.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Union(Vector128<double> point)
     {
-        Union(new Rectangle(point, point));
+        Union(new Rectangle(point, point, CreateMode.TwoPoints));
     }
 
-    //
-    // Summary:
-    //     Creates a rectangle that is exactly large enough to include the specified rectangle
-    //     and the specified point.
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to include.
-    //
-    //   point:
-    //     The point to include.
-    //
-    // Returns:
-    //     A rectangle that is exactly large enough to contain the specified rectangle and
-    //     the specified point.
+    /// <summary>
+    /// Creates a rectangle that is exactly large enough to include the specified rectangle and the specified point.
+    /// </summary>
+    /// <param name="rect">The rectangle to include.</param>
+    /// <param name="point">The point to include.</param>
+    /// <returns>A rectangle that is exactly large enough to contain the specified rectangle and the specified point.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle Union(Rectangle rect, Vector128<double> point)
     {
-        rect.Union(new Rectangle(point, point));
+        rect.Union(new Rectangle(point, point, CreateMode.TwoPoints));
         return rect;
     }
 
-    //
-    // Summary:
-    //     Moves the rectangle by the specified vector.
-    //
-    // Parameters:
-    //   offsetVector:
-    //     A vector that specifies the horizontal and vertical amounts to move the rectangle.
-    //
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     This method is called on the System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Moves the rectangle by the specified vector.
+    /// </summary>
+    /// <param name="offsetVector">A vector that specifies the horizontal and vertical amounts to move the rectangle.</param>
+    /// <returns>The resulting rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Rectange is Empty</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Offset(Vector128<double> offsetVector)
     {
@@ -779,20 +610,13 @@ public struct Rectangle
         _y += offsetVector[1];
     }
 
-    //
-    // Summary:
-    //     Moves the rectangle by the specified horizontal and vertical amounts.
-    //
-    // Parameters:
-    //   offsetX:
-    //     The amount to move the rectangle horizontally.
-    //
-    //   offsetY:
-    //     The amount to move the rectangle vertically.
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     This method is called on the System.Windows.Rect.Empty rectangle.
+    /// <summary>
+    /// Moves the rectangle by the specified horizontal and vertical amounts.
+    /// </summary>
+    /// <param name="offsetX">The amount to move the rectangle horizontally.</param>
+    /// <param name="offsetY">The amount to move the rectangle vertically.</param>
+    /// <returns>The resulting rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Rectange is Empty</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Offset(double offsetX, double offsetY)
     {
@@ -805,25 +629,13 @@ public struct Rectangle
         _y += offsetY;
     }
 
-    //
-    // Summary:
-    //     Returns a rectangle that is offset from the specified rectangle by using the
-    //     specified vector.
-    //
-    // Parameters:
-    //   rect:
-    //     The original rectangle.
-    //
-    //   offsetVector:
-    //     A vector that specifies the horizontal and vertical offsets for the new rectangle.
-    //
-    //
-    // Returns:
-    //     The resulting rectangle.
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     rect is System.Windows.Rect.Empty.
+    /// <summary>
+    /// Returns a rectangle that is offset from the specified rectangle by using the specified vector.
+    /// </summary>
+    /// <param name="rect">The rectangle to move.</param>
+    /// <param name="offsetVector">A vector that specifies the horizontal and vertical offsets for the new rectangle.</param>
+    /// <returns>The resulting rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Rectange is Empty</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle Offset(Rectangle rect, Vector128<double> offsetVector)
     {
@@ -831,27 +643,14 @@ public struct Rectangle
         return rect;
     }
 
-    //
-    // Summary:
-    //     Returns a rectangle that is offset from the specified rectangle by using the
-    //     specified horizontal and vertical amounts.
-    //
-    // Parameters:
-    //   rect:
-    //     The rectangle to move.
-    //
-    //   offsetX:
-    //     The horizontal offset for the new rectangle.
-    //
-    //   offsetY:
-    //     The vertical offset for the new rectangle.
-    //
-    // Returns:
-    //     The resulting rectangle.
-    //
-    // Exceptions:
-    //   T:System.InvalidOperationException:
-    //     rect is System.Windows.Rect.Empty.
+    /// <summary>
+    /// Returns a rectangle that is offset from the specified rectangle by using the specified horizontal and vertical amounts.
+    /// </summary>
+    /// <param name="rect">The rectangle to move.</param>
+    /// <param name="offsetX">The horizontal offset for the new rectangle.</param>
+    /// <param name="offsetY">The vertical offset for the new rectangle.</param>
+    /// <returns>The resulting rectangle.</returns>
+    /// <exception cref="InvalidOperationException">Rectange is Empty</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle Offset(Rectangle rect, double offsetX, double offsetY)
     {

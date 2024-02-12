@@ -57,7 +57,7 @@ public static class Vector128_Extensions
         Vector128.Create(point[0] - current[0], point[1] - current[1]);
 
     public static Vector128<double> GetPointAt(this Vector128<double> point, Vector128<double> vector) =>
-        Vector128.Create(Math.Round(point[0] + vector[0], 5), Math.Round(point[1] + vector[1], 5));
+        Vector128.Create(point[0] + vector[0], point[1] + vector[1]);
 
     public static double GetLengthTo(this Vector128<double> current, Vector128<double> point) =>
         current.GetVectorTo(point).Length();
