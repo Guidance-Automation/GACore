@@ -491,7 +491,7 @@ public struct Rectangle
     public Rectangle(Vector128<double> point1, Vector128<double> point2)
     {
         _x = Math.Min(point1[0], point2[0]);
-        _y = Math.Min(point1[0], point2[1]);
+        _y = Math.Min(point1[1], point2[1]);
         _width = Math.Max(Math.Max(point1[0], point2[0]) - _x, 0.0);
         _height = Math.Max(Math.Max(point1[1], point2[1]) - _y, 0.0);
     }
