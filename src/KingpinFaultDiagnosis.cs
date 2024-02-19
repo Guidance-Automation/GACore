@@ -1,4 +1,6 @@
-﻿using GAAPICommon.Architecture;
+﻿using GAAPICommon;
+using GAAPICommon.Enums;
+using GAAPICommon.Messages;
 using System.Text;
 
 namespace GACore;
@@ -8,7 +10,7 @@ namespace GACore;
 /// </summary>
 public class KingpinFaultDiagnosis
 {
-    public KingpinFaultDiagnosis(IKingpinState kingpinState)
+    public KingpinFaultDiagnosis(KingpinState kingpinState)
     {
         ArgumentNullException.ThrowIfNull(kingpinState);
 

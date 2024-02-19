@@ -1,6 +1,8 @@
-﻿namespace GACore.Architecture;
+﻿using GAAPICommon.Messages;
+
+namespace GACore.Architecture;
 
 public interface IVersionable
 {
-    public ISemVer Version { get; }
+    public SemVer Version { get; }
 }

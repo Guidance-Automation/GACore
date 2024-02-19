@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
-using GAAPICommon.Architecture;
+using GAAPICommon.Enums;
+using GAAPICommon.Messages;
 using Microsoft.Win32;
 
 namespace GACore;
@@ -69,7 +70,7 @@ public static partial class Tools
     {
         ArgumentNullException.ThrowIfNull(extension);
 
-        return System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + extension;
+        return Path.GetTempPath() + Guid.NewGuid().ToString() + extension;
     }
 
     [GeneratedRegex(@"(?<major>\d+)(?:.)(?<minor>\d+)(?:.)(?<patch>\d+)(?:.)(?<releaseFlag>\d)")]

@@ -1,6 +1,7 @@
-﻿using GAAPICommon.Architecture;
+﻿
+using GAAPICommon.Enums;
+using GAAPICommon.Messages;
 using NUnit.Framework;
-using GAAPICommon.Core.Dtos;
 
 namespace GACore.Test;
 
@@ -56,36 +57,36 @@ public class TKingpinFaultDiagnosis
         Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
     }
 
-    private static IKingpinState GetNoFaultState()
+    private static KingpinState GetNoFaultState()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
-            DynamicLimiterStatus = DynamicLimiterStatus.OK,
-            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
-            NavigationStatus = NavigationStatus.OK,
-            PositionControlStatus = PositionControlStatus.OK
+            DynamicLimiterStatus = DynamicLimiterStatus.Ok,
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
+            NavigationStatus = NavigationStatus.Oknavigation,
+            PositionControlStatus = PositionControlStatus.Okposition
         };
     }
 
-    private static IKingpinState GetMotorLostFault()
+    private static KingpinState GetMotorLostFault()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
-            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
             NavigationStatus = NavigationStatus.Lost,
-            PositionControlStatus = PositionControlStatus.OK
+            PositionControlStatus = PositionControlStatus.Okposition
         };
     }
 
-    private static IKingpinState GetMotorFault()
+    private static KingpinState GetMotorFault()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
-            ExtendedDataFaultStatus = ExtendedDataFaultStatus.OK,
-            NavigationStatus = NavigationStatus.OK,
-            PositionControlStatus = PositionControlStatus.OK
+            ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
+            NavigationStatus = NavigationStatus.Oknavigation,
+            PositionControlStatus = PositionControlStatus.Okposition
         };
     }
 }
