@@ -57,9 +57,9 @@ public class TKingpinFaultDiagnosis
         Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
     }
 
-    private static KingpinState GetNoFaultState()
+    private static KingpinStateDto GetNoFaultState()
     {
-        return new KingpinState()
+        return new KingpinStateDto()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.Ok,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
@@ -68,9 +68,9 @@ public class TKingpinFaultDiagnosis
         };
     }
 
-    private static KingpinState GetMotorLostFault()
+    private static KingpinStateDto GetMotorLostFault()
     {
-        return new KingpinState()
+        return new KingpinStateDto()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
@@ -79,9 +79,9 @@ public class TKingpinFaultDiagnosis
         };
     }
 
-    private static KingpinState GetMotorFault()
+    private static KingpinStateDto GetMotorFault()
     {
-        return new KingpinState()
+        return new KingpinStateDto()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,

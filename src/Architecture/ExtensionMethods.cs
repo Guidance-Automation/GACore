@@ -9,7 +9,7 @@ public static class ExtensionMethods
 	/// </summary>
 	/// <param name="semVer"></param>
 	/// <returns>string in the format v1.2.3.2 (Major = 1, Minor = 2, Patch = 3, Release Candidate</returns>
-	public static string ToSemVerVersionString(this SemVer semVer)
+	public static string ToSemVerVersionString(this SemVerDto semVer)
 	{
         ArgumentNullException.ThrowIfNull(semVer);
 

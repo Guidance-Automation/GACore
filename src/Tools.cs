@@ -12,7 +12,7 @@ public static partial class Tools
 
     private static Regex _versionRegex { get; } = VersionRegex();
 
-    public static SemVer? ParseVersionString(string? value)
+    public static SemVerDto? ParseVersionString(string? value)
     {
         if (string.IsNullOrEmpty(value))
             return null;
@@ -26,14 +26,14 @@ public static partial class Tools
             int patch = int.Parse(match.Groups["patch"].Value);
             ReleaseFlag releaseFlag = (ReleaseFlag)int.Parse(match.Groups["releaseFlag"].Value);
 
-            return new SemVer(major, minor, patch, releaseFlag);
+            return new SemVerDto(major, minor, patch, releaseFlag);
         }
 
         return null;
     }
 
     [SupportedOSPlatform("windows")]
-    public static FleetManagementMetadata? GetInstalledFleetManagementMetadata()
+    public static FleetManagementMetadataDto? GetInstalledFleetManagementMetadata()
     {
         try
         {
@@ -50,9 +50,9 @@ public static partial class Tools
             string? productName = fmKey.GetValue("ProductName", null)?.ToString();
             string? versionString = fmKey.GetValue("Version", null)?.ToString();
 
-            SemVer? semVer = ParseVersionString(versionString);
+            SemVerDto? semVer = ParseVersionString(versionString);
 
-            return new FleetManagementMetadata(productName, semVer);
+            return new FleetManagementMetadataDto(productName, semVer);
         }
         catch
         {

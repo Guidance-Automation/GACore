@@ -10,7 +10,7 @@ namespace GACore;
 /// </summary>
 public class KingpinFaultDiagnosis
 {
-    public KingpinFaultDiagnosis(KingpinState kingpinState)
+    public KingpinFaultDiagnosis(KingpinStateDto kingpinState)
     {
         ArgumentNullException.ThrowIfNull(kingpinState);
 

@@ -4,5 +4,5 @@ namespace GACore.Architecture;
 
 public interface IKingpinStateReporter
 {
-    public KingpinState? KingpinState { get; }
+    public KingpinStateDto? KingpinState { get; }
 }
