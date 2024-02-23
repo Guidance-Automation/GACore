@@ -1,4 +1,5 @@
-﻿using GAAPICommon.Messages;
+﻿using GAAPICommon.Enums;
+using GAAPICommon.Messages;
 
 namespace GACore.Architecture;
 
@@ -13,6 +14,6 @@ public static class ExtensionMethods
 	{
         ArgumentNullException.ThrowIfNull(semVer);
 
-        return $"v{semVer.Major}.{semVer.Minor}.{semVer.Patch}.{semVer.ReleaseFlag}";
+        return $"v{semVer.Major}.{semVer.Minor}.{semVer.Patch}.{(int)Enum.Parse<ReleaseFlag>(semVer.ReleaseFlag)}";
 	}
 }
