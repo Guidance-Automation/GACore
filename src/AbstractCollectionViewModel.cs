@@ -50,8 +50,6 @@ public abstract class AbstractCollectionViewModel<T, U, V> : AbstractViewModel<T
             }
 
             U collectionItemViewModel = new() { Model = collectionItemModel };
-
-
             viewModels.Add(collectionItemViewModel);
 
             Logger?.Trace("[{0}] HandleAddCollectionItemModel() added: {1}", GetType().Name, collectionItemModel);
@@ -81,7 +79,10 @@ public abstract class AbstractCollectionViewModel<T, U, V> : AbstractViewModel<T
 
         foreach (V model in existingModels)
         {
-            HandleAddCollectionItemModel(model);
+            if (_sync == null)
+                HandleAddCollectionItemModel(model);
+            else
+                _sync.Post(new SendOrPostCallback((_) => HandleAddCollectionItemModel(model)), null);
         }
     }
 
@@ -151,8 +152,10 @@ public abstract class AbstractCollectionViewModel<T, U, V> : AbstractViewModel<T
     private void ModelAddedImpl(V obj)
     {
         Logger?.Trace("[{0}] Model_Added()", GetType().Name);
-
-        HandleAddCollectionItemModel(obj);
+        if (_sync == null)
+            HandleAddCollectionItemModel(obj);
+        else
+            _sync.Post(new SendOrPostCallback((_) => HandleAddCollectionItemModel(obj)), null);
     }
 
     protected virtual void Dispose(bool isDisposing)

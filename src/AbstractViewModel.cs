@@ -55,9 +55,8 @@ public abstract class AbstractViewModel<T> : IViewModel<T> where T : class
 		switch (InvokeBehavior)
 		{
 			case InvokeBehavior.BeginInvoke:
-				PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), null, null);
+				Task.Run(() => { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)) });
 				break;
-
 			case InvokeBehavior.Invoke:
 			default:
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
