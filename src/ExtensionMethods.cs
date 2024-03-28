@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using GAAPICommon.Messages;
+﻿using GAAPICommon.Interfaces;
+using System.Drawing;
 
 namespace GACore;
 
@@ -24,7 +24,7 @@ public static class ExtensionMethods
         }
     }
 
-    public static KingpinFaultDiagnosis Diagnose(this KingpinStateDto kingpinState) => new(kingpinState);
+    public static KingpinFaultDiagnosis Diagnose(this IKingpinState kingpinState) => new(kingpinState);
 
     public static BrushCollection GetBrushCollection<T>(this Dictionary<T, BrushCollection> dictionary, T key) where T : notnull
     {
