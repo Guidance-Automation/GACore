@@ -1,6 +1,5 @@
-﻿
+﻿using GAAPICommon.Constructors;
 using GAAPICommon.Enums;
-using GAAPICommon.Messages;
 using NUnit.Framework;
 
 namespace GACore.Test;
@@ -57,9 +56,9 @@ public class TKingpinFaultDiagnosis
         Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
     }
 
-    private static KingpinStateDto GetNoFaultState()
+    private static KingpinState GetNoFaultState()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.Ok,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
@@ -68,9 +67,9 @@ public class TKingpinFaultDiagnosis
         };
     }
 
-    private static KingpinStateDto GetMotorLostFault()
+    private static KingpinState GetMotorLostFault()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
@@ -79,9 +78,9 @@ public class TKingpinFaultDiagnosis
         };
     }
 
-    private static KingpinStateDto GetMotorFault()
+    private static KingpinState GetMotorFault()
     {
-        return new KingpinStateDto()
+        return new KingpinState()
         {
             DynamicLimiterStatus = DynamicLimiterStatus.MotorFault,
             ExtendedDataFaultStatus = ExtendedDataFaultStatus.NoFault,
