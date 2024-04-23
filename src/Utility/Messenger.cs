@@ -7,35 +7,17 @@ namespace GACore.Utility;
 /// </summary>
 public class Messenger
 {
-	private static readonly object _creationLock = new();
-
 	private static readonly ConcurrentDictionary<MessengerKey, object> _dictionary = new();
 
-	private static Messenger? _instance;
+    /// <summary>
+    /// Gets the single instance of the Messenger.
+    /// </summary>
+    public static Messenger Default { get; } = new Messenger();
 
-	/// <summary>
-	/// Gets the single instance of the Messenger.
-	/// </summary>
-	public static Messenger Default
-	{
-		get
-		{
-			if (_instance == null)
-			{
-				lock (_creationLock)
-                {
-                    _instance ??= new Messenger();
-				}
-			}
-
-			return _instance;
-		}
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the Messenger class.
-	/// </summary>
-	private Messenger()
+    /// <summary>
+    /// Initializes a new instance of the Messenger class.
+    /// </summary>
+    private Messenger()
 	{
 	}
 

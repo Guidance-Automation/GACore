@@ -40,7 +40,7 @@ public class NLogManager : INotifyPropertyChanged
     {
     }
 
-    public IEnumerable<Logger> GetLoggers()
+    public static IEnumerable<Logger> GetLoggers()
     {
         List<Logger> loggers = [];
 
