@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<PackageVersion>3.0.0-rc.1</PackageVersion>
+		<PackageVersion>3.0.0-rc.2</PackageVersion>
 		<Platforms>x64</Platforms>
 		<ImplicitUsings>true</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -19,7 +19,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="NLog" Version="5.3.2" />
-		<PackageReference Include="GAAPICommon" Version="2.0.0-rc.1" />
+		<PackageReference Include="GAAPICommon" Version="2.0.*-*" />
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
