@@ -22,13 +22,19 @@ public class TGenericMailbox
 
         FooMailbox fooMailbox = new(1, IPAddress.Loopback);
 
-        Assert.That(mailboxes.Add(fooMailbox));
-        Assert.That(!mailboxes.Add(fooMailbox));
+        Assert.Multiple(() =>
+        {
+            Assert.That(mailboxes.Add(fooMailbox));
+            Assert.That(!mailboxes.Add(fooMailbox));
+        });
 
         IPAddress oneNineTwo = IPAddress.Parse("192.168.0.1");
 
         fooMailbox.Update(oneNineTwo);
-        Assert.That(oneNineTwo, Is.EqualTo(fooMailbox.Mail));
-        Assert.That(!mailboxes.Add(fooMailbox));
+        Assert.Multiple(() =>
+        {
+            Assert.That(oneNineTwo, Is.EqualTo(fooMailbox.Mail));
+            Assert.That(!mailboxes.Add(fooMailbox));
+        });
     }
 }

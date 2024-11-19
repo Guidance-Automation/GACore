@@ -34,7 +34,7 @@ public class NLogManager : INotifyPropertyChanged
 
     public static NLogManager Instance { get; } = new();
 
-    private readonly object _lockObject = new();
+    private readonly Lock _lock = new();
 
     public NLogManager()
     {
@@ -61,7 +61,7 @@ public class NLogManager : INotifyPropertyChanged
 
         set
         {
-            lock (_lockObject)
+            using (_lock.EnterScope())
             {
                 if (_logLevel != value)
                 {
@@ -85,7 +85,7 @@ public class NLogManager : INotifyPropertyChanged
 
     public Logger? GetFileTargetLogger(string name)
     {
-        lock (_lockObject)
+        using (_lock.EnterScope())
         {
             if (LogManager.Configuration == null) HandleNullConfiguration();
 

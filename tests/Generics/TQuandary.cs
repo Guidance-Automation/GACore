@@ -13,8 +13,11 @@ public class TQuandary
     {
         Quandary<int> quandary = new(initial, final);
 
-        Assert.That(quandary.Initial, Is.EqualTo(initial));
-        Assert.That(quandary.Final, Is.EqualTo(final));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quandary.Initial, Is.EqualTo(initial));
+            Assert.That(quandary.Final, Is.EqualTo(final));
+        });
     }
 
     [Test]
@@ -22,13 +25,19 @@ public class TQuandary
     {
         int final = 0;
         Quandary<int> quandary = new(int.MinValue, final);
-        Assert.That(quandary.Initial, Is.EqualTo(int.MinValue));
-        Assert.That(quandary.Final, Is.EqualTo(final));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quandary.Initial, Is.EqualTo(int.MinValue));
+            Assert.That(quandary.Final, Is.EqualTo(final));
+        });
 
         final = int.MaxValue;
         quandary.Final = final;
-        Assert.That(quandary.Initial, Is.EqualTo(int.MinValue));
-        Assert.That(quandary.Final, Is.EqualTo(final));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quandary.Initial, Is.EqualTo(int.MinValue));
+            Assert.That(quandary.Final, Is.EqualTo(final));
+        });
     }
 
     [Test]
@@ -36,12 +45,18 @@ public class TQuandary
     {
         int initial = int.MinValue;
         Quandary<int> quandary = new(initial, int.MaxValue);
-        Assert.That(quandary.Initial, Is.EqualTo(initial));
-        Assert.That(quandary.Final, Is.EqualTo(int.MaxValue));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quandary.Initial, Is.EqualTo(initial));
+            Assert.That(quandary.Final, Is.EqualTo(int.MaxValue));
+        });
 
         initial = 0;
         quandary.Initial = initial;
-        Assert.That(quandary.Initial, Is.EqualTo(initial));
-        Assert.That(quandary.Final, Is.EqualTo(int.MaxValue));
+        Assert.Multiple(() =>
+        {
+            Assert.That(quandary.Initial, Is.EqualTo(initial));
+            Assert.That(quandary.Final, Is.EqualTo(int.MaxValue));
+        });
     }
 }

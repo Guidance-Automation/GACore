@@ -1,8 +1,9 @@
-﻿using GACore.Extensions.Test.TestObjects;
+﻿using GACore.Extensions;
+using GACore.Test.Extensions.TestObjects;
 using NUnit.Framework;
 using System.Runtime.Versioning;
 
-namespace GACore.Extensions.Test;
+namespace GACore.Test.Extensions;
 
 [TestFixture]
 [Category("ExtensionMethods")]
@@ -22,9 +23,12 @@ public class TList_ExtensionMethods
 
         for (int i = 0; i < groupBCount; i++) sourceList.Add(new FooB());
 
-        Assert.That(sourceList.Count, Is.EqualTo(expectedCount));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(groupACount));
-        Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(expectedGroups));
+        Assert.That(sourceList, Has.Count.EqualTo(expectedCount));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(groupACount));
+            Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(expectedGroups));
+        });
     }
 
     [Test]
@@ -35,9 +39,12 @@ public class TList_ExtensionMethods
             new FooA(), new FooA(), new FooA()
         ];
 
-        Assert.That(sourceList.Count, Is.EqualTo(3));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
-        Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(1));
+        Assert.That(sourceList, Has.Count.EqualTo(3));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
+            Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(1));
+        });
     }
 
     [Test]
@@ -50,9 +57,12 @@ public class TList_ExtensionMethods
             new FooA(), new FooA(), new FooA()
         ];
 
-        Assert.That(sourceList.Count, Is.EqualTo(8));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
-        Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(3));
+        Assert.That(sourceList, Has.Count.EqualTo(8));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
+            Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(3));
+        });
     }
 
     [Test]
@@ -64,14 +74,20 @@ public class TList_ExtensionMethods
             new FooB(), new FooB(), new FooB()
         ];
 
-        IList<AbstractFoo> delisted = sourceList.DelistGroup();
+        List<AbstractFoo> delisted = sourceList.DelistGroup();
 
-        Assert.That(sourceList.Count, Is.EqualTo(3));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
-        Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(1));
-        Assert.That(delisted.Count, Is.EqualTo(2));
-        Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
-        Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        Assert.That(sourceList, Has.Count.EqualTo(3));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
+            Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(1));
+            Assert.That(delisted, Has.Count.EqualTo(2));
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
+            Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        });
     }
 
     [Test]
@@ -90,7 +106,7 @@ public class TList_ExtensionMethods
 
         List<AbstractFoo> delisted = sourceList.DelistGroup();
 
-        Assert.That(delisted.Count, Is.EqualTo(0));
+        Assert.That(delisted, Is.Empty);
         Assert.That(delisted.CountNextGroup(), Is.EqualTo(0));
     }
 
@@ -104,12 +120,17 @@ public class TList_ExtensionMethods
 
         List<AbstractFoo> delisted = sourceList.DelistGroup();
 
-        Assert.That(sourceList.Count, Is.EqualTo(0));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(0));
-
-        Assert.That(delisted.Count, Is.EqualTo(2));
-        Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
-        Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        Assert.That(sourceList, Is.Empty);
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(0));
+            Assert.That(delisted, Has.Count.EqualTo(2));
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
+            Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        });
     }
 
     [Test]
@@ -130,12 +151,17 @@ public class TList_ExtensionMethods
 
         List<AbstractFoo> delisted = sourceList.DelistGroup();
 
-        Assert.That(sourceList.Count, Is.EqualTo(5));
-        Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
-        Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(2));
-
-        Assert.That(delisted.Count, Is.EqualTo(2));
-        Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
-        Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        Assert.That(sourceList, Has.Count.EqualTo(5));
+        Assert.Multiple(() =>
+        {
+            Assert.That(sourceList.CountNextGroup(), Is.EqualTo(3));
+            Assert.That(sourceList.CountTotalGroups(), Is.EqualTo(2));
+            Assert.That(delisted, Has.Count.EqualTo(2));
+        });
+        Assert.Multiple(() =>
+        {
+            Assert.That(delisted.CountNextGroup(), Is.EqualTo(2));
+            Assert.That(delisted.CountTotalGroups(), Is.EqualTo(1));
+        });
     }
 }

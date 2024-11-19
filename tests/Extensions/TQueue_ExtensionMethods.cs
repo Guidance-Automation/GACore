@@ -1,7 +1,8 @@
-﻿using NUnit.Framework;
+﻿using GACore.Extensions;
+using NUnit.Framework;
 using System.Runtime.Versioning;
 
-namespace GACore.Extensions.Test;
+namespace GACore.Test.Extensions;
 
 [TestFixture]
 [Category("ExtensionMethods")]
@@ -18,7 +19,7 @@ public class TQueue_ExtensionMethods
         Assert.That(queue, Has.Count.EqualTo(6));
         Assert.That(queue, Does.Contain(4));
 
-        Assert.Throws(typeof(InvalidOperationException), delegate { queue.DequeueMatching(i => i == 7); });
+        Assert.Throws<InvalidOperationException>(delegate { queue.DequeueMatching(i => i == 7); });
         int dequeued = queue.DequeueMatching(i => i == 4);
 
         Assert.Multiple(() =>

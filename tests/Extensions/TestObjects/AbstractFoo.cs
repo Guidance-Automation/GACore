@@ -1,4 +1,4 @@
-﻿namespace GACore.Extensions.Test.TestObjects;
+﻿namespace GACore.Test.Extensions.TestObjects;
 
 public abstract class AbstractFoo
 {
@@ -22,7 +22,7 @@ public abstract class AbstractFoo
 
         AbstractFoo other = (AbstractFoo)obj;
 
-        if (other != null) return (Guid == other.Guid);
+        if (other != null) return Guid == other.Guid;
 
         return false;
     }

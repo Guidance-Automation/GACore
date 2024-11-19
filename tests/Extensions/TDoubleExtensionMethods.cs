@@ -1,7 +1,8 @@
-﻿using NUnit.Framework;
+﻿using GACore.Extensions;
+using NUnit.Framework;
 using System.Runtime.Versioning;
 
-namespace GACore.Extensions.Test;
+namespace GACore.Test.Extensions;
 
 [TestFixture]
 [Category("ExtensionMethods")]

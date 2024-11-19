@@ -13,14 +13,15 @@ public class TKingpinFaultDiagnosis
     {
         KingpinFaultDiagnosis diagnosis = new(GetMotorLostFault());
 
-        Assert.That(diagnosis.IsInFault());
-
-        Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
-        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
-        Assert.That(diagnosis.NavigationFault, Is.Not.Null);
-        Assert.That(diagnosis.PCSFault, Is.Null);
-
-        Assert.That(diagnosis, Is.EqualTo(GetMotorLostFault().Diagnose()));
+        Assert.Multiple(() =>
+        {
+            Assert.That(diagnosis.IsInFault());
+            Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
+            Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+            Assert.That(diagnosis.NavigationFault, Is.Not.Null);
+            Assert.That(diagnosis.PCSFault, Is.Null);
+            Assert.That(diagnosis, Is.EqualTo(GetMotorLostFault().Diagnose()));
+        });
         Assert.That(diagnosis, Is.Not.EqualTo(GetMotorFault().Diagnose()));
         Assert.That(diagnosis, Is.Not.EqualTo(GetNoFaultState().Diagnose()));
     }
@@ -30,14 +31,15 @@ public class TKingpinFaultDiagnosis
     {
         KingpinFaultDiagnosis diagnosis = new(GetMotorFault());
 
-        Assert.That(diagnosis.IsInFault());
-
-        Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
-        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
-        Assert.That(diagnosis.NavigationFault, Is.Null);
-        Assert.That(diagnosis.PCSFault, Is.Null);
-
-        Assert.That(diagnosis, Is.EqualTo(GetMotorFault().Diagnose()));
+        Assert.Multiple(() =>
+        {
+            Assert.That(diagnosis.IsInFault());
+            Assert.That(diagnosis.DynamicLimiterFault, Is.Not.Null);
+            Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+            Assert.That(diagnosis.NavigationFault, Is.Null);
+            Assert.That(diagnosis.PCSFault, Is.Null);
+            Assert.That(diagnosis, Is.EqualTo(GetMotorFault().Diagnose()));
+        });
         Assert.That(diagnosis, Is.Not.EqualTo(GetNoFaultState().Diagnose()));
     }
 
@@ -46,14 +48,15 @@ public class TKingpinFaultDiagnosis
     {
         KingpinFaultDiagnosis diagnosis = new(GetNoFaultState());
 
-        Assert.That(!diagnosis.IsInFault());
-
-        Assert.That(diagnosis.DynamicLimiterFault, Is.Null);
-        Assert.That(diagnosis.ExtendedDataFault, Is.Null);
-        Assert.That(diagnosis.NavigationFault, Is.Null);
-        Assert.That(diagnosis.PCSFault, Is.Null);
-
-        Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!diagnosis.IsInFault());
+            Assert.That(diagnosis.DynamicLimiterFault, Is.Null);
+            Assert.That(diagnosis.ExtendedDataFault, Is.Null);
+            Assert.That(diagnosis.NavigationFault, Is.Null);
+            Assert.That(diagnosis.PCSFault, Is.Null);
+            Assert.That(diagnosis, Is.EqualTo(GetNoFaultState().Diagnose()));
+        });
     }
 
     private static KingpinState GetNoFaultState()

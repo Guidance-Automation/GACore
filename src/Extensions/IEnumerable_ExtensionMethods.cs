@@ -11,7 +11,7 @@ public static class IEnumerable_ExtensionMethods
 	{
 		if (enumerable == null) return null;
 
-		List<T> dataSet = new(enumerable);
+		List<T> dataSet = [.. enumerable];
 		List<T> randomDataSet = [];
 
 		for (int i = dataSet.Count; i > 0; i--)

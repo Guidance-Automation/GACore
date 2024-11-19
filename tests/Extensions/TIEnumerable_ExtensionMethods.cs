@@ -23,7 +23,7 @@ public class TIEnumerable_ExtensionMethods
         {
             foreach (double value in refData)
             {
-                Assert.That(randomizedData.Contains(value));
+                Assert.That(randomizedData, Does.Contain(value));
             }
 
             Assert.That(refData, Is.Not.EqualTo(randomizedData));
