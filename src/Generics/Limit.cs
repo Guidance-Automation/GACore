@@ -1,11 +1,10 @@
-﻿namespace GACore.Generics;
+﻿
+namespace GACore.Generics;
 
 public class Limit<T> where T : IComparable
 {
-    private readonly object _lockObject = new();
-
+    private readonly Lock _lock = new();
     private T? _maximum;
-
     private T? _minimum;
 
     /// <summary>
@@ -30,7 +29,7 @@ public class Limit<T> where T : IComparable
         get { return _maximum; }
         set
         {
-            lock (_lockObject)
+            using (_lock.EnterScope())
             {
                 SanityCheck(_minimum, value);
                 _maximum = value;
@@ -43,7 +42,7 @@ public class Limit<T> where T : IComparable
         get { return _minimum; }
         set
         {
-            lock (_lockObject)
+            using (_lock.EnterScope())
             {
                 SanityCheck(value, _maximum);
                 _minimum = value;

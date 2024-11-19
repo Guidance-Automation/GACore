@@ -12,12 +12,18 @@ public class TLimit
     {
         Limit<double> limit = new();
 
-        Assert.That(limit.Minimum, Is.EqualTo(0));
-        Assert.That(limit.Maximum, Is.EqualTo(0));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(0));
+            Assert.That(limit.Maximum, Is.EqualTo(0));
+        });
 
         limit.Maximum = 100;
-        Assert.That(limit.Minimum, Is.EqualTo(0));
-        Assert.That(limit.Maximum, Is.EqualTo(100));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(0));
+            Assert.That(limit.Maximum, Is.EqualTo(100));
+        });
     }
 
     [Test]
@@ -26,8 +32,11 @@ public class TLimit
     {
         Limit<int> limit = new(min, max);
 
-        Assert.That(limit.Minimum, Is.EqualTo(min));
-        Assert.That(limit.Maximum, Is.EqualTo(max));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(min));
+            Assert.That(limit.Maximum, Is.EqualTo(max));
+        });
     }
 
     [Test]
@@ -35,13 +44,19 @@ public class TLimit
     {
         int maximum = 0;
         Limit<int> limit = new(int.MinValue, maximum);
-        Assert.That(limit.Minimum, Is.EqualTo(int.MinValue));
-        Assert.That(limit.Maximum, Is.EqualTo(maximum));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(int.MinValue));
+            Assert.That(limit.Maximum, Is.EqualTo(maximum));
+        });
 
         maximum = int.MaxValue;
         limit.Maximum = maximum;
-        Assert.That(limit.Minimum, Is.EqualTo(int.MinValue));
-        Assert.That(limit.Maximum, Is.EqualTo(maximum));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(int.MinValue));
+            Assert.That(limit.Maximum, Is.EqualTo(maximum));
+        });
     }
 
     [Test]
@@ -49,12 +64,18 @@ public class TLimit
     {
         int minimum = int.MinValue;
         Limit<int> limit = new(minimum, int.MaxValue);
-        Assert.That(limit.Minimum, Is.EqualTo(minimum));
-        Assert.That(limit.Maximum, Is.EqualTo(int.MaxValue));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(minimum));
+            Assert.That(limit.Maximum, Is.EqualTo(int.MaxValue));
+        });
 
         minimum = 0;
         limit.Minimum = minimum;
-        Assert.That(limit.Minimum, Is.EqualTo(minimum));
-        Assert.That(limit.Maximum, Is.EqualTo(int.MaxValue));
+        Assert.Multiple(() =>
+        {
+            Assert.That(limit.Minimum, Is.EqualTo(minimum));
+            Assert.That(limit.Maximum, Is.EqualTo(int.MaxValue));
+        });
     }
 }

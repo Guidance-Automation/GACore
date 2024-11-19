@@ -6,7 +6,7 @@ public class KeyedEnumerable<T> : IKeyedEnumerable<T>
 {
 	public static IKeyedEnumerable<T> Empty()
 	{
-		return new KeyedEnumerable<T>(Guid.Empty, Enumerable.Empty<T>());
+		return new KeyedEnumerable<T>(Guid.Empty, []);
 	}
 
 	public KeyedEnumerable(Guid key, IEnumerable<T> items)

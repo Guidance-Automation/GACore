@@ -1,4 +1,4 @@
-﻿namespace GACore.Extensions.Test.TestObjects;
+﻿namespace GACore.Test.Extensions.TestObjects;
 
 public class FooA : AbstractFoo
 {

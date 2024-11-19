@@ -33,7 +33,7 @@ public class TKeyedEnumerable
     {
         List<int> values = [0, 1, 2, 3];
 
-        IKeyedEnumerable<int> keyed = new KeyedEnumerable<int>(Guid.NewGuid(), values);
+        KeyedEnumerable<int> keyed = new(Guid.NewGuid(), values);
 
         Assert.Multiple(() =>
         {

@@ -1,5 +1,4 @@
-﻿using GACore.Architecture;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace GACore.Test;
 
@@ -10,11 +9,14 @@ public class TGenericResult
     [TestCase(69)]
     public void Success<T>(T instance)
     {
-        IResult<T> result = Result<T>.FromSuccess(instance);
+        Result<T> result = Result<T>.FromSuccess(instance);
 
-        Assert.That(result.IsSuccessful);
-        Assert.That(instance, Is.EqualTo(result.Value));
-        Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccessful);
+            Assert.That(instance, Is.EqualTo(result.Value));
+            Assert.That(string.Equals(string.Empty, result.FailureReason, StringComparison.OrdinalIgnoreCase));
+        });
     }
 
     [TestCase(66)]
@@ -24,11 +26,13 @@ public class TGenericResult
         string message = "OHES NOES";
         Exception ex = new(message);
 
-        IResult<T> result = Result<T>.FromException(ex);
+        Result<T> result = Result<T>.FromException(ex);
 
-        Assert.That(!result.IsSuccessful);
-        Assert.That(string.Equals(result.FailureReason, message, StringComparison.OrdinalIgnoreCase));
-
-        Assert.That(default(T), Is.EqualTo(result.Value));
+        Assert.Multiple(() =>
+        {
+            Assert.That(!result.IsSuccessful);
+            Assert.That(string.Equals(result.FailureReason, message, StringComparison.OrdinalIgnoreCase));
+            Assert.That(default(T), Is.EqualTo(result.Value));
+        });
     }
 }
