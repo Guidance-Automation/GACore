@@ -36,13 +36,6 @@ public static partial class Tools
         return (T?)values.GetValue(Random.Next(values.Length));
     }
 
-    public static string GetTempFilenameWithExtension(string extension = ".xxx")
-    {
-        ArgumentNullException.ThrowIfNull(extension);
-
-        return Path.GetTempPath() + Guid.NewGuid().ToString() + extension;
-    }
-
     [GeneratedRegex(@"(?<major>\d+)(?:.)(?<minor>\d+)(?:.)(?<patch>\d+)(?:.)(?<releaseFlag>\d)")]
     private static partial Regex VersionRegex();
 }
