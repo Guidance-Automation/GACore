@@ -1,10 +1,18 @@
-﻿namespace GACore;
+﻿using NLog;
+
+namespace GACore;
 
 /// <summary>
 /// Creates a temporary file with the specified extension in the system's temporary directory.
 /// </summary>
 public class TemporaryFile : IDisposable
 {
+    private readonly FileSystemWatcher _watcher;
+    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+    private readonly int _deleteMaxRetries;
+    private readonly int _deleteRetryDelay;
+    private readonly ManualResetEvent _fileDeletedEvent = new(false);
+
     /// <summary>
     /// Gets the full path to the temporary file created by this instance.
     /// </summary>
@@ -16,7 +24,13 @@ public class TemporaryFile : IDisposable
     /// </summary>
     /// <param name="extension">
     /// The file extension to use for the temporary file (e.g., ".txt"). 
-    /// Defaults to ".xxx" if no extension is provided.
+    /// Defaults to ".tmp" if no extension is provided.
+    /// </param>
+    /// <param name="deleteMaxRetries">
+    /// Upon calling Dispose, how many times to reattempt the delete of the file.
+    /// </param>
+    /// <param name="deleteRetryDelay">
+    /// The delay in seconds between each delete attempt.
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown if the provided extension contains invalid characters.
@@ -24,10 +38,42 @@ public class TemporaryFile : IDisposable
     /// <exception cref="UnauthorizedAccessException">
     /// Thrown if the application does not have permission to create files in the temporary directory.
     /// </exception>
-    public TemporaryFile(string extension = ".xxx")
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the application fails to retrieve the directory of the created file, hence cannot create a watcher.
+    /// </exception>
+    public TemporaryFile(string extension = ".tmp", int deleteMaxRetries = 10, int deleteRetryDelay = 1000)
     {
+        extension = string.IsNullOrWhiteSpace(extension) ? ".tmp" : extension;
+        if (!extension.StartsWith('.'))
+        {
+            extension = "." + extension;
+        }
+
+        _deleteMaxRetries = deleteMaxRetries;
+        _deleteRetryDelay = deleteRetryDelay;
         FilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + extension);
         using (File.Create(FilePath)) { }
+        string? directoryName = Path.GetDirectoryName(FilePath);
+        if(directoryName != null)
+        {
+            _watcher = new FileSystemWatcher(directoryName)
+            {
+                Filter = Path.GetFileName(FilePath),
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size
+            };
+            _watcher.Deleted += OnFileDeleted;
+            _watcher.EnableRaisingEvents = true;
+        }
+        else
+        {
+            _logger.Error("Directory was null when attempting to create a temporary file.");
+            throw new InvalidOperationException("Unable to create a watcher for the file.");
+        }
+    }
+
+    ~TemporaryFile()
+    {
+        Dispose();
     }
 
     /// <summary>
@@ -40,11 +86,59 @@ public class TemporaryFile : IDisposable
         {
             if (File.Exists(FilePath))
             {
-                File.Delete(FilePath);
+                TryDeleteFile();
             }
         }
-        catch (Exception) { }
-        GC.SuppressFinalize(this);
+        catch(Exception e)
+        {
+            _logger.Error($"Exception occurred when deleting: {e.Message}");
+        }
+        finally
+        {
+            _watcher?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    /// <summary>
+    /// Attempts to delete the file, retrying if it is currently in use.
+    /// </summary>
+    private void TryDeleteFile()
+    {
+        for (int attempt = 0; attempt < _deleteMaxRetries; attempt++)
+        {
+            if(!_fileDeletedEvent.WaitOne(0))
+            {
+                try
+                {
+                    File.Delete(FilePath);
+                    return;
+                }
+                catch (IOException)
+                {
+                    int delay = _deleteRetryDelay * attempt;
+                    _logger.Warn($"File is locked. Retry {attempt} in {delay} ms...");
+                    Thread.Sleep(delay);
+                }
+            }
+            else
+            {
+                // file has been deleted.
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Event handler for when the file is deleted.
+    /// </summary>
+    private void OnFileDeleted(object sender, FileSystemEventArgs e)
+    {
+        if (e.FullPath == FilePath)
+        {
+            _logger.Info($"Temporary file deleted: {e.FullPath}");
+            _fileDeletedEvent.Set();
+        }
     }
 
     /// <summary>
