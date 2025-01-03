@@ -34,4 +34,28 @@ public class TTemporaryFile
             Assert.That(File.Exists(path));
         });
     }
+
+    [Test]
+    public void InvalidExtensionTest()
+    {
+        using TemporaryFile tempFile = new("tmp");
+        string extension = Path.GetExtension(tempFile);
+        Assert.That(extension, Is.EqualTo(".tmp"));
+    }
+
+    [Test]
+    public void CorrectDetectionOfDeletion()
+    {
+        string tempPath;
+        using (TemporaryFile tempFile = new(".tmp"))
+        {
+            tempPath = tempFile;
+            Assert.That(File.Exists(tempPath));
+            File.Delete(tempPath);
+            Assert.That(File.Exists(tempPath), Is.False);
+            Thread.Sleep(100);
+            Assert.DoesNotThrow(() => tempFile.Dispose());
+        }
+        Assert.That(File.Exists(tempPath), Is.False);
+    }
 }
