@@ -20,6 +20,7 @@ public class TTemporaryFile
                 Assert.That(tempFile.FilePath, Does.EndWith(extension));
             });
         }
+        Thread.Sleep(100);
         Assert.That(File.Exists(tempPath), Is.False);
     }
 

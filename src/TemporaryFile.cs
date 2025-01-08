@@ -54,7 +54,7 @@ public class TemporaryFile : IDisposable
         FilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + extension);
         using (File.Create(FilePath)) { }
         string? directoryName = Path.GetDirectoryName(FilePath);
-        if(directoryName != null)
+        if (directoryName != null)
         {
             _watcher = new FileSystemWatcher(directoryName)
             {
@@ -84,12 +84,9 @@ public class TemporaryFile : IDisposable
     {
         try
         {
-            if (File.Exists(FilePath))
-            {
-                TryDeleteFile();
-            }
+            TryDeleteFile();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             _logger.Error($"Exception occurred when deleting: {e.Message}");
         }
@@ -105,28 +102,34 @@ public class TemporaryFile : IDisposable
     /// </summary>
     private void TryDeleteFile()
     {
-        for (int attempt = 0; attempt < _deleteMaxRetries; attempt++)
+        Task.Run(() =>
         {
-            if(!_fileDeletedEvent.WaitOne(0))
+            if (File.Exists(FilePath))
             {
-                try
+                for (int attempt = 0; attempt < _deleteMaxRetries; attempt++)
                 {
-                    File.Delete(FilePath);
-                    return;
-                }
-                catch (IOException)
-                {
-                    int delay = _deleteRetryDelay * attempt;
-                    _logger.Warn($"File is locked. Retry {attempt} in {delay} ms...");
-                    Thread.Sleep(delay);
+                    if (!_fileDeletedEvent.WaitOne(0))
+                    {
+                        try
+                        {
+                            File.Delete(FilePath);
+                            return;
+                        }
+                        catch (IOException)
+                        {
+                            int delay = _deleteRetryDelay * attempt;
+                            _logger.Warn($"File is locked. Retry {attempt} in {delay} ms...");
+                            Thread.Sleep(delay);
+                        }
+                    }
+                    else
+                    {
+                        // file has been deleted.
+                        return;
+                    }
                 }
             }
-            else
-            {
-                // file has been deleted.
-                return;
-            }
-        }
+        });
     }
 
     /// <summary>
