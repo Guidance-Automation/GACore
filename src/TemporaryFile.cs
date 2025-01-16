@@ -7,11 +7,9 @@ namespace GACore;
 /// </summary>
 public class TemporaryFile : IDisposable
 {
-    private readonly FileSystemWatcher _watcher;
     private readonly Logger _logger = LogManager.GetCurrentClassLogger();
     private readonly int _deleteMaxRetries;
     private readonly int _deleteRetryDelay;
-    private readonly ManualResetEvent _fileDeletedEvent = new(false);
 
     /// <summary>
     /// Gets the full path to the temporary file created by this instance.
@@ -53,22 +51,6 @@ public class TemporaryFile : IDisposable
         _deleteRetryDelay = deleteRetryDelay;
         FilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + extension);
         using (File.Create(FilePath)) { }
-        string? directoryName = Path.GetDirectoryName(FilePath);
-        if (directoryName != null)
-        {
-            _watcher = new FileSystemWatcher(directoryName)
-            {
-                Filter = Path.GetFileName(FilePath),
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size
-            };
-            _watcher.Deleted += OnFileDeleted;
-            _watcher.EnableRaisingEvents = true;
-        }
-        else
-        {
-            _logger.Error("Directory was null when attempting to create a temporary file.");
-            throw new InvalidOperationException("Unable to create a watcher for the file.");
-        }
     }
 
     ~TemporaryFile()
@@ -92,7 +74,6 @@ public class TemporaryFile : IDisposable
         }
         finally
         {
-            _watcher?.Dispose();
             GC.SuppressFinalize(this);
         }
     }
@@ -108,40 +89,20 @@ public class TemporaryFile : IDisposable
             {
                 for (int attempt = 0; attempt < _deleteMaxRetries; attempt++)
                 {
-                    if (!_fileDeletedEvent.WaitOne(0))
+                    try
                     {
-                        try
-                        {
-                            File.Delete(FilePath);
-                            return;
-                        }
-                        catch (IOException)
-                        {
-                            int delay = _deleteRetryDelay * attempt;
-                            _logger.Warn($"File is locked. Retry {attempt} in {delay} ms...");
-                            Thread.Sleep(delay);
-                        }
-                    }
-                    else
-                    {
-                        // file has been deleted.
+                        File.Delete(FilePath);
                         return;
+                    }
+                    catch (IOException)
+                    {
+                        int delay = _deleteRetryDelay * attempt;
+                        _logger.Warn($"File is locked. Retry {attempt} in {delay} ms...");
+                        Thread.Sleep(delay);
                     }
                 }
             }
         });
-    }
-
-    /// <summary>
-    /// Event handler for when the file is deleted.
-    /// </summary>
-    private void OnFileDeleted(object sender, FileSystemEventArgs e)
-    {
-        if (e.FullPath == FilePath)
-        {
-            _logger.Info($"Temporary file deleted: {e.FullPath}");
-            _fileDeletedEvent.Set();
-        }
     }
 
     /// <summary>
