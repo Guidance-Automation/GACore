@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using NLog;
+using System.Collections.Concurrent;
 
 namespace GACore.Utility;
 
@@ -8,18 +9,7 @@ namespace GACore.Utility;
 public class MessengerAsync
 {
     private static readonly ConcurrentDictionary<MessengerKey, object> _dictionary = new();
-
-    /// <summary>
-    /// Gets the single instance of the Messenger.
-    /// </summary>
-    public static MessengerAsync Default { get; } = new();
-
-    /// <summary>
-    /// Initializes a new instance of the Messenger class.
-    /// </summary>
-    private MessengerAsync()
-    {
-    }
+    private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
     /// <summary>
     /// Registers a recipient for a type of message T. The action parameter will be executed
@@ -30,6 +20,7 @@ public class MessengerAsync
     /// <param name="action"></param>
     public static void Register<T>(object recipient, Func<T, Task> action)
     {
+        _logger.Trace($"Register {recipient.GetType().Name} for {typeof(T).Name}");
         Register(recipient, action, null);
     }
 
@@ -43,8 +34,9 @@ public class MessengerAsync
     /// <param name="context"></param>
     public static void Register<T>(object recipient, Func<T, Task> action, object? context)
     {
+        _logger.Trace($"Register {recipient.GetType().Name} for {typeof(T).Name} with context {context?.GetType().Name}");
         MessengerKey key = new(recipient, context);
-        _dictionary.TryAdd(key, action);
+        _dictionary.AddOrUpdate(key, action, (_, _) => action);
     }
 
     /// <summary>
@@ -54,6 +46,7 @@ public class MessengerAsync
     /// <param name="recipient"></param>
     public static void Unregister(object recipient)
     {
+        _logger.Trace($"Unregister {recipient.GetType().Name}");
         Unregister(recipient, null);
     }
 
@@ -65,6 +58,7 @@ public class MessengerAsync
     /// <param name="context"></param>
     public static void Unregister(object recipient, object? context)
     {
+        _logger.Trace($"Unregister {recipient.GetType().Name} with context {context?.GetType().Name}");
         MessengerKey key = new(recipient, context);
         _dictionary.TryRemove(key, out _);
     }
@@ -77,6 +71,7 @@ public class MessengerAsync
     /// <param name="message"></param>
     public static Task SendAsync<T>(T message)
     {
+        _logger.Trace($"Send {typeof(T).Name}");
         return SendAsync(message, null);
     }
 
@@ -89,20 +84,23 @@ public class MessengerAsync
     /// <param name="context"></param>
     public static async Task SendAsync<T>(T message, object? context)
     {
-        IEnumerable<KeyValuePair<MessengerKey, object>> result;
+        _logger.Trace($"Send {typeof(T).Name} with context {context?.GetType().Name}");
 
-        if (context == null)
-        {
-            // Get all recipients where the context is null.
-            result = from r in _dictionary where r.Key.Context == null select r;
-        }
-        else
-        {
-            // Get all recipients where the context is matching.
-            result = from r in _dictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
-        }
+        List<Func<T, Task>> recipients = [.. _dictionary
+            .Where(r => Equals(r.Key.Context, context))
+            .Select(x => x.Value)
+            .OfType<Func<T, Task>>()];
 
-        IEnumerable<Task> tasks = result.Select(x => x.Value).OfType<Func<T, Task>>().Select(action => action(message));
-        await Task.WhenAll(tasks);
+        await Parallel.ForEachAsync(recipients, async (action, _) =>
+        {
+            try
+            {
+                await action(message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error while handling message asynchronously: {ex.Message}");
+            }
+        });
     }
 }
