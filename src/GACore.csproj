@@ -16,8 +16,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NLog" Version="5.3.*" />
-		<PackageReference Include="GAAPICommon" Version="2.2.*" />
+		<PackageReference Include="NLog" Version="5.4.*" />
+		<PackageReference Include="GAAPICommon" Version="2.3.*" />
 		<None Include="..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
