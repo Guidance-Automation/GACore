@@ -3,11 +3,11 @@
 namespace GACore.Architecture;
 
 /// <summary>
-/// A viewmodel with a self maintaining observable collection of other viewmodels. 
+/// A view model with a self maintaining observable collection of other view models. 
 /// </summary>
-/// <typeparam name="T">The model this viewmodel exposes, e.g. something with a collection</typeparam>
-/// <typeparam name="U">The viewmodels we expose as a collection.</typeparam>
-/// <typeparam name="V">The model for the viewmodels, e.g. U is a viewmodel for a model V</typeparam>
+/// <typeparam name="T">The model this view model exposes, e.g. something with a collection</typeparam>
+/// <typeparam name="U">The view models we expose as a collection.</typeparam>
+/// <typeparam name="V">The model for the view models, e.g. U is a view model for a model V</typeparam>
 public interface ICollectionViewModel<T, U, V> : IViewModel<T>
     where T : class, IModelCollection<V>
     where U : IViewModel<V>

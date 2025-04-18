@@ -41,9 +41,6 @@ internal class MessengerKey(object recipient, object? context)
     /// <returns></returns>
     public override int GetHashCode()
     {
-        unchecked
-        {
-            return ((Recipient != null ? Recipient.GetHashCode() : 0) * 397) ^ (Context != null ? Context.GetHashCode() : 0);
-        }
+        return HashCode.Combine(Recipient, Context);
     }
 }

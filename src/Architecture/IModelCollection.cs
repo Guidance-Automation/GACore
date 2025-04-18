@@ -6,5 +6,7 @@ public interface IModelCollection<T>
 
     public event Action<T> Removed;
 
+    public event Action<T> Updated;
+
     public IEnumerable<T> GetModels();
 }
