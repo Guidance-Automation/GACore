@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-		<PackageVersion>3.2.0</PackageVersion>
+		<PackageVersion>3.2.1</PackageVersion>
 		<UseArtifactsOutput>true</UseArtifactsOutput>
 	</PropertyGroup>
 </Project>
